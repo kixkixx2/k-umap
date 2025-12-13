@@ -544,28 +544,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderScatterPlot();
 });
 
-// Check if API is running
-async function checkAPIHealth() {
+// Check if API is running with retry for cold starts
+async function checkAPIHealth(retries = 3, delay = 2000) {
     const statusIndicator = document.getElementById('apiStatus');
     const statusText = document.getElementById('apiStatusText');
     
-    try {
-        const response = await fetch(`${API_BASE_URL}/health`);
-        const data = await response.json();
-        
-        if (data.status === 'healthy') {
-            statusIndicator.className = 'status-indicator online';
-            statusText.textContent = 'API Online';
-        } else {
-            statusIndicator.className = 'status-indicator offline';
-            statusText.textContent = 'API Offline';
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            if (attempt > 1) {
+                statusText.textContent = `Connecting... (attempt ${attempt}/${retries})`;
+            }
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout for cold starts
+            
+            const response = await fetch(`${API_BASE_URL}/health`, {
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            
+            const data = await response.json();
+            
+            if (data.status === 'healthy') {
+                statusIndicator.className = 'status-indicator online';
+                statusText.textContent = 'API Online';
+                return true;
+            } else {
+                throw new Error('API not healthy');
+            }
+        } catch (error) {
+            console.warn(`API health check attempt ${attempt} failed:`, error.message);
+            if (attempt < retries) {
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
         }
-    } catch (error) {
-        statusIndicator.className = 'status-indicator offline';
-        statusText.textContent = 'API Offline';
-        console.error('❌ API health check failed:', error);
-        showNotification('API server is not running. Please start the Flask server.', 'error');
     }
+    
+    statusIndicator.className = 'status-indicator offline';
+    statusText.textContent = 'API Offline';
+    console.error('❌ API health check failed after all retries');
+    showNotification('API server is not responding. It may be starting up (cold start). Please refresh in 30 seconds.', 'warning');
+    return false;
 }
 
 // Load all patients data from backend
