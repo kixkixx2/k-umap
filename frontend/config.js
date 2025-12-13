@@ -1,14 +1,19 @@
 // API Configuration
-// Update BACKEND_URL with your Render backend URL after deployment
+// Automatically detects environment and uses appropriate backend URL
 const API_CONFIG = {
-    // Development: Use localhost
-    // Production: Use your Render URL (e.g., https://patient-clustering.onrender.com)
-    // If the page is opened via file:// (local file), default to localhost backend
-    BACKEND_URL: (window.location.protocol === 'file:') || window.location.hostname === ''
-        ? 'http://localhost:5000'
-        : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-            ? 'http://localhost:5000'
-            : 'https://patient-clustering-api.onrender.com', // Updated with actual Render URL
+    // Auto-detect: use relative URLs in production (same origin), localhost for local dev
+    BACKEND_URL: (() => {
+        // Local file access - use localhost
+        if (window.location.protocol === 'file:' || window.location.hostname === '') {
+            return 'http://localhost:5000';
+        }
+        // Local development
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return 'http://localhost:5000';
+        }
+        // Production: use same origin (relative URLs work since frontend is served by Flask)
+        return '';
+    })(),
     
     // API Endpoints
     ENDPOINTS: {
