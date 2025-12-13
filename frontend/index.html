@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Add this Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self'; 
+        script-src 'self' 'unsafe-eval' https://cdn.plot.ly https://cdn.jsdelivr.net; 
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+        font-src 'self' https://fonts.gstatic.com; 
+        connect-src 'self' http://localhost:5000 http://127.0.0.1:5000 https://patient-clustering-api.onrender.com;
+        img-src 'self' data: https:;
+    ">
+    <title>K-UMAP - Advanced Patient Analytics</title>
+    <link rel="stylesheet" href="style.css?v=20251213">
+    <style>
+        /* Spinning animation for loading */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        .dashboard-page {
+            background: radial-gradient(circle at 8% 15%, rgba(37, 99, 235, 0.18), transparent 45%),
+                        radial-gradient(circle at 85% 10%, rgba(139, 92, 246, 0.12), transparent 55%),
+                        var(--bg-darker);
+            color: var(--text-primary);
+        }
+
+        .dashboard-page .main-content {
+            padding: 2.5rem clamp(1.25rem, 4vw, 3rem) 3rem;
+        }
+
+        .dashboard-page .dashboard-hero {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: flex-start;
+            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 55%),
+                        radial-gradient(circle at bottom left, rgba(14, 165, 233, 0.15), transparent 50%),
+                        rgba(5, 10, 25, 0.92);
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            border-radius: 24px;
+            padding: clamp(1.5rem, 4vw, 2.75rem);
+            margin-bottom: 2.5rem;
+            box-shadow: 0 35px 65px rgba(2, 6, 23, 0.65);
+        }
+
+        .dashboard-page .dashboard-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), transparent 60%);
+        }
+
+        .dashboard-page .dashboard-hero > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .dashboard-page .hero-content {
+            flex: 1 1 380px;
+        }
+
+        .dashboard-page .hero-eyebrow {
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            color: rgba(191, 219, 254, 0.8);
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .dashboard-page .hero-subtitle {
+            color: rgba(226, 232, 240, 0.85);
+            max-width: 520px;
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-page .hero-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .dashboard-page .hero-pill {
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            padding: 0.45rem 1.25rem;
+            font-size: 0.85rem;
+            color: rgba(226, 232, 240, 0.9);
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .dashboard-page .hero-status {
+            flex: 0 1 280px;
+        }
+
+        .dashboard-page .hero-status-card {
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.08);
+        }
+
+        .dashboard-page .hero-status-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: rgba(148, 163, 184, 0.85);
+            margin-bottom: 0.75rem;
+        }
+
+        .dashboard-page .hero-status-value {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .dashboard-page .hero-status-card p {
+            color: rgba(148, 163, 184, 0.9);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-page .btn {
+            border-radius: 12px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+        }
+
+        .dashboard-page .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            border: none;
+            color: #fff;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+        }
+
+        .dashboard-page .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 35px rgba(124, 58, 237, 0.35);
+        }
+
+        .dashboard-page .btn-outline {
+            background: rgba(15, 23, 42, 0.85);
+            color: rgba(226, 232, 240, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .dashboard-page .btn-outline:hover {
+            border-color: rgba(59, 130, 246, 0.8);
+            color: #fff;
+            box-shadow: 0 12px 20px rgba(15, 23, 42, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .dashboard-page .stats-grid {
+            gap: 1.75rem;
+        }
+
+        .dashboard-page .stat-card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9));
+            box-shadow: 0 20px 40px rgba(2, 6, 23, 0.45);
+        }
+
+        .dashboard-page .stat-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 50%);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .dashboard-page .stat-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .dashboard-page .stat-value {
+            font-size: 2.35rem;
+        }
+
+        .dashboard-page .card-elevated {
+            background: radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15), transparent 55%), rgba(8, 12, 24, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 20px;
+            box-shadow: 0 35px 55px rgba(2, 6, 23, 0.65);
+            padding: 2rem;
+        }
+
+        .dashboard-page .card-header {
+            padding-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .dashboard-page .card-header > div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .dashboard-page .card-eyebrow {
+            font-size: 0.75rem;
+            letter-spacing: 0.25em;
+            color: rgba(148, 163, 184, 0.75);
+            text-transform: uppercase;
+        }
+
+        .dashboard-page .card-subtitle {
+            color: rgba(226, 232, 240, 0.85);
+        }
+
+        .dashboard-page .card-banner {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.75);
+            box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.35);
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-page .card-banner-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(145deg, rgba(59, 130, 246, 0.25), rgba(99, 102, 241, 0.25));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #bfdbfe;
+        }
+
+        .dashboard-page .card-banner-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .dashboard-page .card-banner-text {
+            font-size: 0.9rem;
+            color: rgba(148, 163, 184, 0.9);
+        }
+
+        .dashboard-page .cluster-summary-chips {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .dashboard-page .cluster-chip {
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(15, 23, 42, 0.7);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .dashboard-page .cluster-chip-low {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(15, 23, 42, 0.9));
+        }
+
+        .dashboard-page .cluster-chip-mid {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.18), rgba(15, 23, 42, 0.9));
+        }
+
+        .dashboard-page .cluster-chip-high {
+            background: linear-gradient(135deg, rgba(248, 113, 113, 0.18), rgba(15, 23, 42, 0.9));
+        }
+
+        .dashboard-page .chip-label {
+            font-size: 0.85rem;
+            color: rgba(226, 232, 240, 0.75);
+        }
+
+        .dashboard-page .chip-value {
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+
+        .dashboard-page .search-container {
+            background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.75rem;
+        }
+
+        .dashboard-page .search-input-wrapper {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            padding: 0.85rem 1rem;
+        }
+
+        .dashboard-page .search-input {
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .dashboard-page .search-input::placeholder {
+            color: rgba(148, 163, 184, 0.7);
+        }
+
+        .dashboard-page .search-results {
+            margin-top: 0;
+            border-radius: 18px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 1.75rem;
+            background: rgba(2, 6, 23, 0.65);
+            box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.35);
+        }
+
+        .dashboard-page .results-heading {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .dashboard-page .results-grid {
+            gap: 1.25rem;
+        }
+
+        .dashboard-page .result-box {
+            padding: 1.1rem;
+            border-radius: 14px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .dashboard-page .result-value {
+            font-size: 1.1rem;
+        }
+
+        .dashboard-page .cluster-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+
+        .dashboard-page .cluster-badge.cluster-0 {
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+        }
+
+        .dashboard-page .cluster-badge.cluster-1 {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fcd34d;
+        }
+
+        .dashboard-page .cluster-badge.cluster-2 {
+            background: rgba(248, 113, 113, 0.18);
+            color: #fca5a5;
+        }
+
+        .dashboard-page .patient-details-section {
+            margin-top: 1.75rem;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .dashboard-page .detail-item {
+            border-bottom: 1px dashed rgba(148, 163, 184, 0.2);
+            padding-bottom: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .dashboard-page .detail-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .dashboard-page .cluster-recommendation {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 18px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.3), rgba(14, 165, 233, 0.1));
+            box-shadow: 0 25px 45px rgba(5, 8, 22, 0.6);
+        }
+
+        .dashboard-page .cluster-recommendation .rec-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fcd34d;
+        }
+
+        .dashboard-page .cluster-recommendation .rec-title {
+            font-size: 0.95rem;
+            color: rgba(226, 232, 240, 0.85);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.35rem;
+        }
+
+        .dashboard-page .cluster-recommendation .rec-text {
+            color: rgba(226, 232, 240, 0.95);
+            line-height: 1.5;
+        }
+
+        .dashboard-page .cluster-explanation-container {
+            margin-top: 2rem;
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(2, 6, 23, 0.7);
+        }
+
+        .dashboard-page .cluster-explanation-toggle {
+            border: none;
+            background: transparent;
+            padding: 1.25rem 1.5rem;
+            width: 100%;
+            color: var(--text-primary);
+        }
+
+        .dashboard-page .cluster-explanation-content {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .dashboard-page .explanation-section {
+            border-radius: 14px;
+            padding: 1.25rem;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .dashboard-page .explanation-section h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .dashboard-page .plot-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .dashboard-page .card-elevated .plot-wrapper {
+            background: rgba(2, 6, 23, 0.85);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem 1.5rem 1.75rem;
+            box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.35);
+        }
+
+        .dashboard-page .card-elevated .plot-container {
+            background: transparent;
+            border: none;
+            border-radius: 14px;
+            padding: 0;
+            min-height: 420px;
+            overflow: hidden;
+        }
+
+        .dashboard-page .plot-legend {
+            border-top: 1px solid rgba(148, 163, 184, 0.15);
+            padding-top: 1rem;
+        }
+
+        .dashboard-page .plot-legend .legend-item {
+            background: rgba(15, 23, 42, 0.75);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        .dashboard-page .legend-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dashboard-page .legend-dot.cluster-0 {
+            background: #10b981;
+        }
+
+        .dashboard-page .legend-dot.cluster-1 {
+            background: #f59e0b;
+        }
+
+        .dashboard-page .legend-dot.cluster-2 {
+            background: #ef4444;
+        }
+
+        .dashboard-page .form-select,
+        .dashboard-page select {
+            background: rgba(15, 23, 42, 0.85) !important;
+            border: 1px solid rgba(148, 163, 184, 0.3) !important;
+            border-radius: 12px;
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-page .main-content {
+                padding: 1.5rem;
+            }
+
+            .dashboard-page .dashboard-hero {
+                flex-direction: column;
+            }
+
+            .dashboard-page .card-elevated {
+                padding: 1.5rem;
+            }
+
+            .dashboard-page .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+</head>
+<body class="dashboard-page">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        
+        <div class="logo">
+            <div class="logo-icon">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="18" stroke="#2563eb" stroke-width="2"/>
+                    <circle cx="15" cy="18" r="4" fill="#3b82f6"/>
+                    <circle cx="26" cy="22" r="4" fill="#60a5fa"/>
+                    <line x1="17" y1="20" x2="24" y2="21" stroke="#2563eb" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="logo-text">
+                <h2>K-UMAP</h2>
+                <p>Advanced Analytics Platform</p>
+            </div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item active">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="analysis.html" class="nav-item">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="20" x2="12" y2="10"></line>
+                    <line x1="18" y1="20" x2="18" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="16"></line>
+                </svg>
+                <span>Analysis</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="system-info">
+                <div class="info-label">System Version</div>
+                <div class="info-value">v2.1.0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Header -->
+        <header class="header dashboard-hero particle-bg">
+            <div class="hero-content">
+                <p class="hero-eyebrow">Precision Care Intelligence</p>
+                <h1 class="gradient-text">Patient Clustering Dashboard</h1>
+                <p class="hero-subtitle">Real-time monitoring and analysis of patient health clusters powered by K-Means & UMAP</p>
+                <div class="hero-pills">
+                    <span class="hero-pill">Realtime cohort metrics</span>
+                    <span class="hero-pill">Adaptive UMAP reducer</span>
+                    <span class="hero-pill">Explainable cluster insights</span>
+                </div>
+            </div>
+            <div class="hero-status">
+                <div class="hero-status-card glass-card">
+                    <div class="hero-status-label">API STATUS</div>
+                    <div class="hero-status-value">
+                        <span class="status-indicator" id="apiStatus"></span>
+                        <span id="apiStatusText">Checking...</span>
+                    </div>
+                    <p>Monitors local and cloud inference endpoints for automatic failover.</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card stat-card-blue">
+                <div class="stat-icon-wrapper">
+                    <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Total Patients</div>
+                    <div class="stat-value" id="totalPatients">-</div>
+                    <div class="stat-sublabel">Analyzed records</div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card-green">
+                <div class="stat-icon-wrapper">
+                    <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="6"></circle>
+                        <circle cx="12" cy="12" r="2"></circle>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Active Clusters</div>
+                    <div class="stat-value" id="totalClusters">-</div>
+                    <div class="stat-sublabel">Identified groups</div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card-purple">
+                <div class="stat-icon-wrapper">
+                    <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">System Status</div>
+                    <div class="stat-value" id="modelStatus">Operational</div>
+                    <div class="stat-sublabel">Model active</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Search -->
+        <div class="card card-elevated patient-search-card">
+            <div class="card-header">
+                <div>
+                    <p class="card-eyebrow">Targeted lookup</p>
+                    <h2>Patient Cluster Lookup</h2>
+                    <p class="card-subtitle">Search for a patient by ID to view their cluster assignment and health metrics</p>
+                </div>
+                <button id="refreshBtn" class="btn btn-outline">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                    Refresh Snapshot
+                </button>
+            </div>
+
+            <div class="cluster-summary-chips">
+                <div class="cluster-chip cluster-chip-low">
+                    <span class="chip-label" id="cluster0Label">Cluster 0</span>
+                    <span class="chip-value" id="cluster0Count">-</span>
+                </div>
+                <div class="cluster-chip cluster-chip-mid">
+                    <span class="chip-label" id="cluster1Label">Cluster 1</span>
+                    <span class="chip-value" id="cluster1Count">-</span>
+                </div>
+                <div class="cluster-chip cluster-chip-high">
+                    <span class="chip-label" id="cluster2Label">Cluster 2</span>
+                    <span class="chip-value" id="cluster2Count">-</span>
+                </div>
+            </div>
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input
+                        type="text"
+                        id="patientSearchInput"
+                        class="search-input"
+                        placeholder="Enter Patient ID (e.g., 22-0641)"
+                        inputmode="text"
+                        autocomplete="off"
+                    >
+                    <!-- Autocomplete results container -->
+                    <div id="autocompleteResults" class="autocomplete-results"></div>
+                </div>
+                <button id="searchBtn" class="btn btn-primary">
+                    Search Patient
+                </button>
+            </div>
+
+            <div id="searchResults" class="search-results" style="display: none;">
+                <div class="results-heading">
+                    <p class="card-eyebrow">Patient summary</p>
+                    <p class="card-subtitle">Synchronized with the latest clinical inference run</p>
+                </div>
+                <div class="result-box result-box-accent">
+                    <div class="result-label">Assigned Cluster</div>
+                    <div class="result-value cluster-badge" id="searchCluster">-</div>
+                </div>
+
+                <div class="results-subsection">
+                    <div class="results-subheading">Demo</div>
+                    <div class="results-grid results-grid-compact">
+                        <div class="result-box">
+                            <div class="result-label">Patient ID</div>
+                            <div class="result-value" id="searchPatientId">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Year Level</div>
+                            <div class="result-value" id="searchYearLevel">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Age</div>
+                            <div class="result-value" id="searchAge">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Gender</div>
+                            <div class="result-value" id="searchGender">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">BMI</div>
+                            <div class="result-value" id="searchBMI">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-subsection">
+                    <div class="results-subheading">Diagnosis</div>
+                    <div class="results-grid results-grid-compact">
+                        <div class="result-box">
+                            <div class="result-label">Respiratory Issue</div>
+                            <div class="result-value" id="searchRespiratory">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Pain</div>
+                            <div class="result-value" id="searchPain">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Fever</div>
+                            <div class="result-value" id="searchFever">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">Allergy</div>
+                            <div class="result-value" id="searchAllergy">-</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-label">UTI</div>
+                            <div class="result-value" id="searchUTI">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cluster-recommendation" id="clusterRec" style="display: none;">
+                    <div class="rec-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div class="rec-content">
+                        <div class="rec-title">Clinical Recommendation</div>
+                        <div class="rec-text" id="recText"></div>
+                    </div>
+                </div>
+
+                <!-- Collapsible Cluster Explanation -->
+                <details open class="results-panel" id="dashboardClusterNarrativePanel" style="border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-darker); margin-top: 1rem;">
+                    <summary style="list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 1rem; font-weight: 600; color: var(--text-primary);">
+                        <span>Cluster Details</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s;">
+                            <path d="M6 9l6 6 6-6"></path>
+                        </svg>
+                    </summary>
+                    <div id="dashboardClusterExplanationContent" class="clinical-alerts-wrapper">
+                        <!-- Content populated by home.js -->
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- Visualization -->
+        <div class="card card-elevated">
+            <div class="card-header">
+                <div>
+                    <p class="card-eyebrow">Exploratory view</p>
+                    <h2>Cluster Visualization</h2>
+                    <p class="card-subtitle">2D representation of patient clusters using UMAP dimensionality reduction</p>
+                </div>
+                <div style="min-width: 200px;">
+                    <label for="featureSelector" style="display: block; font-size: 0.875rem; color: #9CA3AF; margin-bottom: 0.25rem;">Color by:</label>
+                    <select id="featureSelector" class="form-select" style="width: 100%; padding: 0.5rem; background-color: #1F2937; color: #E5E7EB; border: 1px solid #374151; border-radius: 0.375rem; cursor: pointer;">
+                        <option value="cluster">Cluster (Default)</option>
+                        <option value="age_years">Age (Years)</option>
+                        <option value="bmi">BMI</option>
+                        <option value="year_level">Year Level</option>
+                        <option value="has_respiratory_issue">Respiratory Issue Flag</option>
+                        <option value="has_pain">Pain Indicator</option>
+                        <option value="has_fever">Fever Indicator</option>
+                        <option value="has_allergy">Allergy Indicator</option>
+                        <option value="is_uti">UTI Indicator</option>
+                        <option value="is_female">Female Indicator</option>
+                        <option value="cluster_confidence">Cluster Confidence</option>
+                    </select>
+                </div>
+            </div>
+            <div class="plot-wrapper" id="clusterPlotContainer">
+                <div id="clusterPlot" class="plot-container"></div>
+                <div class="plot-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot cluster-0"></span>
+                        <span id="legendCluster0Label">Cluster 0</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot cluster-1"></span>
+                        <span id="legendCluster1Label">Cluster 1</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot cluster-2"></span>
+                        <span id="legendCluster2Label">Cluster 2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="config.js"></script>
+    <script src="patient-search.js"></script>
+    <script src="viz-enhancements.js"></script>
+    <script src="sidebar.js"></script>
+    <script src="home.js"></script>
+    
+</body>
+</html>
+
+
+

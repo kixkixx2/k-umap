@@ -1,0 +1,223 @@
+{
+  "generated_at": "2025-12-13T15:18:59.231558Z",
+  "total_patients": 184,
+  "n_umap_components": 3,
+  "best_2d_projection": {
+    "dimensions": [
+      1,
+      3
+    ],
+    "silhouette_2d": 0.6623
+  },
+  "clusters": [
+    {
+      "cluster": 0,
+      "count": 10,
+      "percentage": 5.43,
+      "mean_bmi": 20.88,
+      "mean_age": 18.4,
+      "feature_means": {
+        "has_respiratory_issue": 0.8,
+        "has_pain": 0.0,
+        "has_fever": 1.0,
+        "has_allergy": 0.0,
+        "is_uti": 0.0,
+        "year_level": 1.0,
+        "age_years": 18.4,
+        "is_female": 1.0,
+        "bmi": 20.8833,
+        "cluster_confidence": 0.713
+      }
+    },
+    {
+      "cluster": 1,
+      "count": 24,
+      "percentage": 13.04,
+      "mean_bmi": 124.26,
+      "mean_age": 18.58,
+      "feature_means": {
+        "has_respiratory_issue": 0.75,
+        "has_pain": 0.25,
+        "has_fever": 1.0,
+        "has_allergy": 0.7083,
+        "is_uti": 0.0833,
+        "year_level": 1.087,
+        "age_years": 18.5833,
+        "is_female": 0.3333,
+        "bmi": 124.2595,
+        "cluster_confidence": 0.4526
+      }
+    },
+    {
+      "cluster": 2,
+      "count": 18,
+      "percentage": 9.78,
+      "mean_bmi": 21.57,
+      "mean_age": 17.22,
+      "feature_means": {
+        "has_respiratory_issue": 0.5556,
+        "has_pain": 0.3333,
+        "has_fever": 0.0556,
+        "has_allergy": 0.2222,
+        "is_uti": 0.0,
+        "year_level": 1.1111,
+        "age_years": 17.2222,
+        "is_female": 0.6111,
+        "bmi": 21.5747,
+        "cluster_confidence": 0.5216
+      }
+    },
+    {
+      "cluster": 3,
+      "count": 39,
+      "percentage": 21.2,
+      "mean_bmi": 22.29,
+      "mean_age": 18.95,
+      "feature_means": {
+        "has_respiratory_issue": 0.5641,
+        "has_pain": 0.4615,
+        "has_fever": 0.9744,
+        "has_allergy": 0.1795,
+        "is_uti": 0.0769,
+        "year_level": 1.7949,
+        "age_years": 18.9474,
+        "is_female": 0.3684,
+        "bmi": 22.2937,
+        "cluster_confidence": 0.349
+      }
+    },
+    {
+      "cluster": 4,
+      "count": 24,
+      "percentage": 13.04,
+      "mean_bmi": 22.28,
+      "mean_age": 18.75,
+      "feature_means": {
+        "has_respiratory_issue": 0.6667,
+        "has_pain": 0.0417,
+        "has_fever": 0.0,
+        "has_allergy": 0.0833,
+        "is_uti": 0.0,
+        "year_level": 1.1905,
+        "age_years": 18.75,
+        "is_female": 0.3636,
+        "bmi": 22.2807,
+        "cluster_confidence": 0.424
+      }
+    },
+    {
+      "cluster": 5,
+      "count": 8,
+      "percentage": 4.35,
+      "mean_bmi": 21.04,
+      "mean_age": 18.0,
+      "feature_means": {
+        "has_respiratory_issue": 1.0,
+        "has_pain": 0.0,
+        "has_fever": 1.0,
+        "has_allergy": 0.0,
+        "is_uti": 0.0,
+        "year_level": 1.1429,
+        "age_years": 18.0,
+        "is_female": 0.0,
+        "bmi": 21.035,
+        "cluster_confidence": 0.8471
+      }
+    },
+    {
+      "cluster": 6,
+      "count": 4,
+      "percentage": 2.17,
+      "mean_bmi": 23.21,
+      "mean_age": 18.0,
+      "feature_means": {
+        "has_respiratory_issue": 0.0,
+        "has_pain": 1.0,
+        "has_fever": 1.0,
+        "has_allergy": 0.0,
+        "is_uti": 0.0,
+        "year_level": 1.0,
+        "age_years": 18.0,
+        "is_female": 0.0,
+        "bmi": 23.2125,
+        "cluster_confidence": 0.9439
+      }
+    },
+    {
+      "cluster": 7,
+      "count": 28,
+      "percentage": 15.22,
+      "mean_bmi": 21.93,
+      "mean_age": 18.64,
+      "feature_means": {
+        "has_respiratory_issue": 0.0714,
+        "has_pain": 0.7143,
+        "has_fever": 0.2857,
+        "has_allergy": 0.4643,
+        "is_uti": 0.0357,
+        "year_level": 1.1111,
+        "age_years": 18.6429,
+        "is_female": 0.6429,
+        "bmi": 21.9271,
+        "cluster_confidence": 0.5066
+      }
+    },
+    {
+      "cluster": 8,
+      "count": 10,
+      "percentage": 5.43,
+      "mean_bmi": 23.48,
+      "mean_age": 19.2,
+      "feature_means": {
+        "has_respiratory_issue": 0.1,
+        "has_pain": 0.0,
+        "has_fever": 1.0,
+        "has_allergy": 0.0,
+        "is_uti": 0.0,
+        "year_level": 1.2222,
+        "age_years": 19.2,
+        "is_female": 0.0,
+        "bmi": 23.481,
+        "cluster_confidence": 0.6587
+      }
+    },
+    {
+      "cluster": 9,
+      "count": 12,
+      "percentage": 6.52,
+      "mean_bmi": 22.72,
+      "mean_age": 18.25,
+      "feature_means": {
+        "has_respiratory_issue": 0.5,
+        "has_pain": 1.0,
+        "has_fever": 1.0,
+        "has_allergy": 0.0,
+        "is_uti": 0.0,
+        "year_level": 1.0,
+        "age_years": 18.25,
+        "is_female": 0.6667,
+        "bmi": 22.715,
+        "cluster_confidence": 0.6301
+      }
+    },
+    {
+      "cluster": 10,
+      "count": 7,
+      "percentage": 3.8,
+      "mean_bmi": 19.99,
+      "mean_age": 18.14,
+      "feature_means": {
+        "has_respiratory_issue": 0.0,
+        "has_pain": 0.0,
+        "has_fever": 0.0,
+        "has_allergy": 0.0,
+        "is_uti": 0.0,
+        "year_level": 1.0,
+        "age_years": 18.1429,
+        "is_female": 1.0,
+        "bmi": 19.9871,
+        "cluster_confidence": 0.8746
+      }
+    }
+  ]
+}

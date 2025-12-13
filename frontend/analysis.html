@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Add this Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self'; 
+        script-src 'self' 'unsafe-eval' https://cdn.plot.ly https://cdn.jsdelivr.net; 
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+        font-src 'self' https://fonts.gstatic.com; 
+        connect-src 'self' http://localhost:5000 http://127.0.0.1:5000 https://patient-clustering-api.onrender.com;
+        img-src 'self' data: https:;
+    ">
+    
+    <title>K-UMAP - Patient Cluster Analysis</title>
+    <link rel="stylesheet" href="style.css?v=20251213">
+    <style>
+        /* Spinning animation for loading */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        .patient-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .patient-form .form-sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .patient-form .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .patient-form .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .patient-form .form-sections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .patient-form .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .patient-form .form-section {
+                padding: 1rem;
+            }
+        }
+
+        .patient-form .form-section {
+            background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 55%),
+                        radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.12), transparent 50%),
+                        rgba(13, 20, 38, 0.95);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .patient-form .section-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(59, 130, 246, 0.12);
+            color: var(--primary-light-blue);
+            box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.15);
+        }
+
+        .patient-form .form-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: rgba(226, 232, 240, 0.95);
+            letter-spacing: 0.01em;
+        }
+
+        .patient-form .form-group input,
+        .patient-form .form-group select {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(15, 23, 42, 0.7);
+            padding: 0.85rem 1rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+        }
+
+        .patient-form .form-group select {
+            appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, rgba(148, 163, 184, 0.85) 50%),
+                              linear-gradient(135deg, rgba(148, 163, 184, 0.85) 50%, transparent 50%);
+            background-position: calc(100% - 16px) calc(50% - 2px), calc(100% - 12px) calc(50% - 2px);
+            background-size: 6px 6px, 6px 6px;
+            background-repeat: no-repeat;
+            padding-right: 2.75rem;
+        }
+
+        .patient-form .form-group input:focus,
+        .patient-form .form-group select:focus,
+        .patient-form .input-with-unit:focus-within {
+            border-color: rgba(59, 130, 246, 0.9);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+            background: rgba(15, 23, 42, 0.9);
+            outline: none;
+        }
+
+        .patient-form .input-with-unit {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.25rem 0.75rem;
+            background: rgba(15, 23, 42, 0.7);
+            transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+        }
+
+        .patient-form .input-with-unit input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 0.75rem 0;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .patient-form .input-with-unit .unit {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        .patient-form .form-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .patient-form .form-actions .btn {
+            flex: 1 1 200px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(15, 23, 42, 0.75);
+            color: rgba(226, 232, 240, 0.95);
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 1.25rem;
+            transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
+        }
+
+        .patient-form .form-actions .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #fff;
+            border: none;
+            box-shadow: 0 12px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .patient-form .form-actions .btn-secondary,
+        .patient-form .form-actions .btn-outline {
+            background: rgba(15, 23, 42, 0.85);
+        }
+
+        .patient-form .form-actions .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 24px rgba(15, 23, 42, 0.35);
+        }
+
+        /* Improved layout for diagnosis flags */
+        .form-section .form-grid .form-group.flag-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.25rem 0;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2563eb;
+            cursor: pointer;
+        }
+
+        .flag-yes {
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .info-icon {
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            cursor: help;
+            border-bottom: 1px dotted rgba(148,163,184,0.25);
+            padding-bottom: 1px;
+        }
+        .info-icon {
+            position: relative;
+        }
+
+        .info-icon .info-tooltip {
+            position: absolute;
+            top: 26px;
+            left: 0;
+            background: rgba(6,11,25,0.95);
+            color: #E5E7EB;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+            font-size: 0.85rem;
+            line-height: 1.2;
+            white-space: normal;
+            min-width: 220px;
+            max-width: 320px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 150ms ease, visibility 150ms ease;
+            z-index: 60;
+        }
+
+        .info-icon:focus .info-tooltip,
+        .info-icon:hover .info-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Body-level tooltip (used when tooltip is rendered in document.body) */
+        .info-tooltip-body {
+            position: absolute;
+            background: rgba(6,11,25,0.95);
+            color: #E5E7EB;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+            font-size: 0.85rem;
+            line-height: 1.2;
+            white-space: normal;
+            min-width: 220px;
+            max-width: 360px;
+            opacity: 0;
+            transition: opacity 150ms ease;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .upload-center-card {
+            margin-top: 1.5rem;
+            background: rgba(10, 15, 30, 0.9);
+        }
+
+        .upload-center-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .upload-panel,
+        .upload-meta {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.08);
+        }
+
+        .file-upload-area.dragging {
+            border-color: var(--primary-light-blue);
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        .upload-panel h3,
+        .upload-meta h3 {
+            margin-bottom: 1rem;
+        }
+
+        .upload-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+
+        .upload-actions .btn {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .upload-instructions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-instructions li {
+            color: rgba(226, 232, 240, 0.8);
+            font-size: 0.95rem;
+        }
+
+            padding-left: 1.25rem;
+        }
+
+        .upload-instructions li::marker {
+            color: var(--primary-light-blue);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            background: rgba(6, 11, 25, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        .batch-progress,
+        .batch-results {
+            background: rgba(6, 11, 25, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 14px;
+            padding: 1.25rem;
+        }
+
+        .batch-result-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .batch-result-card {
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+        }
+
+        .batch-result-card span {
+            display: block;
+            font-size: 0.85rem;
+            color: rgba(226, 232, 240, 0.7);
+        }
+
+        .batch-result-card strong {
+            font-size: 1.35rem;
+            color: #fff;
+        }
+
+        .download-btn {
+            width: 100%;
+            margin-top: 1rem;
+            border-radius: 12px;
+        }
+
+        .progress-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(135deg, #34d399, #10b981);
+            border-radius: inherit;
+            transition: width 0.3s ease;
+        }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        
+        <div class="logo">
+            <div class="logo-icon">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="18" stroke="#2563eb" stroke-width="2"/>
+                    <circle cx="15" cy="18" r="4" fill="#3b82f6"/>
+                    <circle cx="26" cy="22" r="4" fill="#60a5fa"/>
+                    <line x1="17" y1="20" x2="24" y2="21" stroke="#2563eb" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="logo-text">
+                <h2>K-UMAP</h2>
+                <p>Advanced Analytics Platform</p>
+            </div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="analysis.html" class="nav-item active">
+                <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="20" x2="12" y2="10"></line>
+                    <line x1="18" y1="20" x2="18" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="16"></line>
+                </svg>
+                <span>Analysis</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="system-info">
+                <div class="info-label">System Version</div>
+                <div class="info-value">v2.1.0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Header -->
+            <header class="header">
+                <div>
+                    <h1>Patient Cluster Prediction</h1>
+                    <p class="subtitle">Enter patient information to predict their cluster assignment</p>
+                </div>
+                <div class="api-status">
+                    <span class="status-indicator" id="apiStatus"></span>
+                    <span id="apiStatusText">Checking...</span>
+                </div>
+            </header>
+
+        <!-- Patient Input Form -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Patient Information</h2>
+                <p>Fill in the patient details below for cluster prediction</p>
+            </div>
+            
+            <form id="patientForm" class="patient-form">
+                <div class="form-sections-grid">
+                    <!-- School ID -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <span class="section-icon" aria-hidden="true">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 7h18M3 11h18M5 21h14v-8H5v8z" />
+                                </svg>
+                            </span>
+                            School ID
+                        </h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="school_id">School ID</label>
+                                <input type="text" id="school_id" name="school_id" placeholder="e.g. 22-0641" required pattern="[0-9]{2}-[0-9]{4}" aria-required="true">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Demographics -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <span class="section-icon" aria-hidden="true">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4h-8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </span>
+                            Demographics
+                        </h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" id="last_name" name="last_name" placeholder="Optional">
+                            </div>
+                            <div class="form-group">
+                                <label for="first_name">First Name</label>
+                                <input type="text" id="first_name" name="first_name" placeholder="Optional">
+                            </div>
+                            <div class="form-group">
+                                <label for="age">Age (years)</label>
+                                <input type="number" id="age" name="age" step="1" min="14" max="60" placeholder="e.g. 19" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="year_level">Year Level</label>
+                                <select id="year_level" name="year_level" required>
+                                    <option value="">Select...</option>
+                                    <option value="1">1st Year</option>
+                                    <option value="2">2nd Year</option>
+                                    <option value="3">3rd Year</option>
+                                    <option value="4">4th Year</option>
+                                    <option value="5">5th Year</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select id="gender" name="gender" required>
+                                    <option value="">Select...</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="height_cm">Height (cm)</label>
+                                <input type="number" id="height_cm" name="height_cm" step="1" min="54" max="272" placeholder="e.g. 165">
+                            </div>
+                            <div class="form-group">
+                                <label for="weight_kg">Weight (kg)</label>
+                                <input type="number" id="weight_kg" name="weight_kg" step="0.1" min="10" max="635" placeholder="e.g. 68.5">
+                            </div>
+                            <div class="form-group">
+                                <label for="BMI">BMI</label>
+                                <input type="number" id="BMI" name="BMI" step="0.1" readonly placeholder="Computed automatically">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Diagnosis / Flags -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <span class="section-icon" aria-hidden="true">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <path d="M7 10l5 5 5-5" />
+                                </svg>
+                            </span>
+                            Diagnosis / Flags
+                        </h3>
+                        <div class="form-grid">
+                            <div class="form-group flag-row">
+                                <label for="has_respiratory_issue">Has Respiratory Issue
+                                    <span class="info-icon" role="button" tabindex="0"> ⓘ
+                                        <span class="info-tooltip">Respiratory issues include asthma, wheezing, shortness of breath, chronic cough or other breathing-related complaints.</span>
+                                    </span>
+                                </label>
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="has_respiratory_issue" name="has_respiratory_issue" value="1">
+                                    <span class="flag-yes">Yes</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group flag-row">
+                                <label for="has_pain">Has Pain <span class="info-icon" role="button" tabindex="0"> ⓘ
+                                        <span class="info-tooltip">Acute or chronic pain reported by the patient (e.g., localized, diffuse, or procedural pain).</span>
+                                    </span></label>
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="has_pain" name="has_pain" value="1">
+                                    <span class="flag-yes">Yes</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group flag-row">
+                                <label for="has_fever">Has Fever <span class="info-icon" role="button" tabindex="0"> ⓘ
+                                        <span class="info-tooltip">Recent or current elevated body temperature or reported feverish symptoms.</span>
+                                    </span></label>
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="has_fever" name="has_fever" value="1">
+                                    <span class="flag-yes">Yes</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group flag-row">
+                                <label for="has_allergy">Has Allergy <span class="info-icon" role="button" tabindex="0"> ⓘ
+                                        <span class="info-tooltip">Known allergies to medications, foods, or environmental triggers that may affect care decisions.</span>
+                                    </span></label>
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="has_allergy" name="has_allergy" value="1">
+                                    <span class="flag-yes">Yes</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group flag-row">
+                                <label for="is_uti">UTI Indicator <span class="info-icon" role="button" tabindex="0"> ⓘ
+                                        <span class="info-tooltip">Indicates urinary tract infection symptoms or a documented UTI diagnosis (e.g., dysuria, frequency, urgency).</span>
+                                    </span></label>
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="is_uti" name="is_uti" value="1">
+                                    <span class="flag-yes">Yes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="predictBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Predict Cluster
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="fillSampleBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
+                        Fill Sample Data
+                    </button>
+                    <button type="reset" class="btn btn-outline">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>
+                        Reset Form
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Batch Upload Center -->
+        <div class="card upload-center-card" id="batchUploadCenter">
+            <div class="card-header">
+                <div>
+                    <h2>Batch Upload Center</h2>
+                    <p>Process an entire cohort at once using the official CSV format</p>
+                </div>
+                <div class="tag" style="background: rgba(59,130,246,0.12); color: var(--primary-light-blue); padding: 0.35rem 0.85rem; border-radius: 999px; font-weight: 600;">CSV</div>
+            </div>
+            <div class="upload-center-grid">
+                <div class="upload-panel">
+                    <h3>Upload CSV File</h3>
+                    <input type="file" id="csvFileInput" accept=".csv" hidden>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <div class="file-upload-content">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 1rem; color: var(--primary-blue);">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p style="font-weight: 600; margin-bottom: 0.25rem; font-size: 1rem;">Click to upload or drag and drop</p>
+                            <p style="color: var(--text-muted); font-size: 0.875rem;">CSV files up to 5MB</p>
+                        </div>
+                    </div>
+                    <div class="file-info" id="fileInfo" style="display: none; margin-top: 1rem;">
+                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                            <strong id="fileName">-</strong>
+                            <span id="fileSize" style="color: var(--text-muted); font-size: 0.875rem;">0 KB</span>
+                        </div>
+                        <button type="button" class="btn btn-outline" id="removeFile" style="max-width: 180px;">Remove File</button>
+                    </div>
+                    <div class="upload-actions">
+                        <button type="button" class="btn btn-primary" id="startBatchPredict" disabled>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Start Batch Prediction
+                        </button>
+                    </div>
+                </div>
+                <div class="upload-meta">
+                    <h3>How it works</h3>
+                    <div class="upload-template" style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.25); border-radius: 12px; padding: 0.75rem 1rem; margin-bottom: 0.85rem;">
+                        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; justify-content: space-between;">
+                            <div>
+                                <p style="margin: 0; color: var(--text-secondary); font-weight: 600;">Download the official CSV template</p>
+                                <p style="margin: 0.15rem 0 0 0; color: var(--text-muted); font-size: 0.9rem;">Headers: Student_No, year_level, age_years, gender, BMI, has_respiratory_issue, has_pain, has_fever, has_allergy, is_uti.</p>
+                            </div>
+                            <a class="btn btn-outline" href="batch_template.csv" download="batch_template.csv" style="white-space: nowrap;">Download Template</a>
+                        </div>
+                    </div>
+                    <ul class="upload-instructions">
+                        <li>Use the same feature headers as the single-patient form.</li>
+                        <li>Missing headers or invalid types will be highlighted before processing.</li>
+                        <li>Keep files under 5MB to ensure fast uploads.</li>
+                    </ul>
+                    <div class="batch-progress" id="batchProgress" style="display: none;">
+                        <div class="progress-header">
+                            <strong id="progressText">0%</strong>
+                            <span id="progressMessage">Waiting for upload...</span>
+                        </div>
+                        <div class="progress-track" style="margin-top: 0.75rem;">
+                            <div class="progress-fill" id="progressBar"></div>
+                        </div>
+                    </div>
+                    <div class="batch-results" id="batchResults" style="display: none; margin-top: 1rem;">
+                        <h4 style="margin-bottom: 0.75rem;">Batch Summary</h4>
+                        <div class="batch-result-stats">
+                            <div class="batch-result-card">
+                                <span>Total Processed</span>
+                                <strong id="totalProcessed">0</strong>
+                            </div>
+                            <div class="batch-result-card">
+                                <span>Successful</span>
+                                <strong id="successCount">0</strong>
+                            </div>
+                            <div class="batch-result-card">
+                                <span>Saved to Database</span>
+                                <strong id="savedCount">0</strong>
+                            </div>
+                            <div class="batch-result-card">
+                                <span>Failed</span>
+                                <strong id="failedCount">0</strong>
+                            </div>
+                        </div>
+                        <div class="batch-results-list" aria-live="polite">
+                            <div class="batch-results-list-header">
+                                <div>
+                                    <span class="batch-results-title">Predicted Patients</span>
+                                    <p class="batch-results-subtitle">Click a patient to load their full insights above.</p>
+                                </div>
+                                <span class="batch-results-count" id="batchResultsCount"></span>
+                            </div>
+                            <div class="batch-results-table-wrapper">
+                                <table class="batch-results-table" aria-describedby="batchResultsCount">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Patient ID</th>
+                                            <th scope="col">Cluster</th>
+                                            <th scope="col">Confidence</th>
+                                            <th scope="col">BMI</th>
+                                            <th scope="col">Blood Glucose</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="batchResultsBody"></tbody>
+                                </table>
+                                <p class="batch-results-empty" id="batchResultsEmpty">No successful predictions yet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="card results-card" style="display: none;">
+            <div class="card-header">
+                <div>
+                    <h2>Prediction Results</h2>
+                    <p>Cluster assignment and patient health profile summary</p>
+                </div>
+            </div>
+
+            <!-- Primary Results: School ID, Cluster, Confidence -->
+            <div class="results-summary-grid" role="list" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="summary-card" role="listitem">
+                    <div class="summary-icon patient-icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4h-8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div class="summary-content">
+                        <p class="summary-label">School ID</p>
+                        <p class="summary-value" id="assignedPatientId">-</p>
+                        <span class="summary-subtext" id="patientIdSubtext">Student Identifier</span>
+                    </div>
+                </div>
+
+                <div class="summary-card" role="listitem">
+                    <div class="summary-icon cluster-icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="summary-content">
+                        <p class="summary-label">Assigned Cluster</p>
+                        <p class="summary-value" id="predictedCluster">-</p>
+                        <span class="summary-pill" id="clusterDescription">Processing...</span>
+                    </div>
+                </div>
+
+                <div class="summary-card" role="listitem">
+                    <div class="summary-icon confidence-icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l3 3"></path>
+                        </svg>
+                    </div>
+                    <div class="summary-content">
+                        <p class="summary-label">
+                            Confidence Level
+                            <span class="info-icon" role="button" tabindex="0" style="cursor: help;"> ⓘ
+                                <span class="info-tooltip" style="width: 280px; left: -100px;">
+                                    Confidence shows how well this patient matches the assigned cluster compared to other clusters. 
+                                    Higher percentage = stronger match to cluster characteristics.
+                                </span>
+                            </span>
+                        </p>
+                        <p class="summary-value" id="confidenceScore">-</p>
+                        <div class="confidence-meter">
+                            <div class="confidence-track">
+                                <div id="confidenceBar" class="confidence-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Information -->
+            <div class="results-panel-section" style="margin-top: 1.5rem;">
+                <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-primary); font-size: 1.1rem;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4h-8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Patient Information
+                </h3>
+                <div class="demographics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
+                    <div class="demo-item" style="background: var(--bg-tertiary); padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                        <span style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Name</span>
+                        <p id="resultName" style="color: var(--text-primary); font-weight: 600; margin: 0.5rem 0 0 0; font-size: 1.1rem;">-</p>
+                    </div>
+                    <div class="demo-item" style="background: var(--bg-tertiary); padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                        <span style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Year Level</span>
+                        <p id="resultYearLevel" style="color: var(--text-primary); font-weight: 600; margin: 0.5rem 0 0 0; font-size: 1.1rem;">-</p>
+                    </div>
+                    <div class="demo-item" style="background: var(--bg-tertiary); padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                        <span style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Age</span>
+                        <p id="resultAge" style="color: var(--text-primary); font-weight: 600; margin: 0.5rem 0 0 0; font-size: 1.1rem;">-</p>
+                    </div>
+                    <div class="demo-item" style="background: var(--bg-tertiary); padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                        <span style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Gender</span>
+                        <p id="resultGender" style="color: var(--text-primary); font-weight: 600; margin: 0.5rem 0 0 0; font-size: 1.1rem;">-</p>
+                    </div>
+                    <div class="demo-item" style="background: var(--bg-tertiary); padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                        <span style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Height</span>
+                        <p id="resultHeight" style="color: var(--text-primary); font-weight: 600; margin: 0.5rem 0 0 0; font-size: 1.1rem;">-</p>
+                    </div>
+                    <div class="demo-item" style="background: var(--bg-tertiary); padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                        <span style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Weight</span>
+                        <p id="resultWeight" style="color: var(--text-primary); font-weight: 600; margin: 0.5rem 0 0 0; font-size: 1.1rem;">-</p>
+                    </div>
+                    <div class="demo-item" style="background: var(--bg-tertiary); padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                        <span style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">BMI</span>
+                        <p id="resultBMI" style="color: var(--text-primary); font-weight: 600; margin: 0.5rem 0 0 0; font-size: 1.1rem;">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Conditions -->
+            <div class="results-panel-section" style="margin-top: 1.5rem;">
+                <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--text-primary); font-size: 1.1rem;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    Health Conditions
+                </h3>
+                <div class="diagnosis-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+                    <div class="diagnosis-item" id="diagRespiratory" style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-tertiary); padding: 0.875rem 1rem; border-radius: 0.5rem; border-left: 4px solid var(--text-muted);">
+                        <span style="color: var(--text-secondary);">Respiratory Issue</span>
+                        <span class="diagnosis-status" style="font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.85rem;">-</span>
+                    </div>
+                    <div class="diagnosis-item" id="diagPain" style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-tertiary); padding: 0.875rem 1rem; border-radius: 0.5rem; border-left: 4px solid var(--text-muted);">
+                        <span style="color: var(--text-secondary);">Pain</span>
+                        <span class="diagnosis-status" style="font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.85rem;">-</span>
+                    </div>
+                    <div class="diagnosis-item" id="diagFever" style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-tertiary); padding: 0.875rem 1rem; border-radius: 0.5rem; border-left: 4px solid var(--text-muted);">
+                        <span style="color: var(--text-secondary);">Fever</span>
+                        <span class="diagnosis-status" style="font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.85rem;">-</span>
+                    </div>
+                    <div class="diagnosis-item" id="diagAllergy" style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-tertiary); padding: 0.875rem 1rem; border-radius: 0.5rem; border-left: 4px solid var(--text-muted);">
+                        <span style="color: var(--text-secondary);">Allergy</span>
+                        <span class="diagnosis-status" style="font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.85rem;">-</span>
+                    </div>
+                    <div class="diagnosis-item" id="diagUTI" style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-tertiary); padding: 0.875rem 1rem; border-radius: 0.5rem; border-left: 4px solid var(--text-muted);">
+                        <span style="color: var(--text-secondary);">UTI</span>
+                        <span class="diagnosis-status" style="font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.85rem;">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clinical Summary & Cluster Details -->
+            <div class="results-collapses" style="margin-top: 1.5rem;">
+                <details open class="results-panel" id="clinicalSummaryPanel">
+                    <summary>
+                        <span>Clinical Summary</span>
+                    </summary>
+                    <div id="clinicalAlertsContainer" class="clinical-alerts-wrapper"></div>
+                </details>
+
+                <details class="results-panel" id="clusterNarrativePanel">
+                    <summary>
+                        <span>Cluster Details</span>
+                    </summary>
+                    <div id="clusterExplanationContent" class="clinical-alerts-wrapper">
+                        <!-- Content populated by script.js -->
+                    </div>
+                </details>
+            </div>
+
+            <!-- Scatter Plot -->
+            <div class="plot-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div>
+                        <h3 style="margin: 0;">Patient Distribution Visualization</h3>
+                        <p class="plot-subtitle" style="margin: 0.25rem 0 0 0;">Your patient is highlighted in red on the scatter plot</p>
+                    </div>
+                    <div style="min-width: 200px;">
+                        <label for="featureSelector" style="display: block; font-size: 0.875rem; color: #9CA3AF; margin-bottom: 0.25rem;">Color by:</label>
+                        <select id="featureSelector" class="form-select" style="width: 100%; padding: 0.5rem; background-color: #1F2937; color: #E5E7EB; border: 1px solid #374151; border-radius: 0.375rem; cursor: pointer;">
+                            <option value="cluster">Cluster (Default)</option>
+                            <option value="age_years">Age (Years)</option>
+                            <option value="bmi">BMI</option>
+                            <option value="year_level">Year Level</option>
+                            <option value="has_respiratory_issue">Respiratory Issue Flag</option>
+                            <option value="has_pain">Pain Indicator</option>
+                            <option value="has_fever">Fever Indicator</option>
+                            <option value="has_allergy">Allergy Indicator</option>
+                            <option value="is_uti">UTI Indicator</option>
+                            <option value="is_female">Female Indicator</option>
+                            <option value="cluster_confidence">Cluster Confidence</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="scatterPlot"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 K-UMAP. Advanced Patient Analytics - Powered by Machine Learning</p>
+        </footer>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="validation.js"></script>
+    <script src="clinical-alerts.js"></script>
+    <script src="patient-search.js"></script>
+    <script src="viz-enhancements.js"></script>
+    <script src="sidebar.js"></script>
+    <script src="script.js"></script>
+    
+</body>
+</html>
+
+

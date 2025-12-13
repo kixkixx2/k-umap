@@ -1,0 +1,18 @@
+# Core Flask dependencies
+flask>=2.3.0
+flask-cors>=4.0.0
+gunicorn>=21.0.0
+
+# ML/Data processing
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+joblib>=1.3.0
+umap-learn>=0.5.4
+scipy>=1.11.0
+
+# Optimization (for training)
+optuna>=3.4.0
+
+# Additional utilities
+python-dotenv>=1.0.0

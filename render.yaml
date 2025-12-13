@@ -1,0 +1,22 @@
+# Render deployment configuration
+# See https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: patient-clustering-api
+    runtime: python
+    region: oregon  # or singapore, frankfurt, ohio
+    plan: free  # free, starter, standard, pro
+    buildCommand: pip install -r requirements.txt && python build.py
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: PORT
+        value: "10000"
+      - key: ARTIFACT_DIR
+        value: "artifacts"
+      - key: FRONTEND_DIR
+        value: "frontend"
+    healthCheckPath: /stats
+    autoDeploy: true

@@ -1,0 +1,185 @@
+Student_No,Last_Name,First_Name,Middle_Name,Date_of_Birth,Place_of_Birth,Parent_Guardian_Name,Treatment,Remarks,has_respiratory_issue,has_pain,has_fever,has_allergy,is_uti,year_level,age_years,age_group,is_female,bmi
+22-0641,Betrido,Bea Marize,Calixtro,"Oct 25, 2004","Aglipay District Hospital, Aglipay, Quirino",Jombert Betrido,"antibiotic, tablets",not recorded,1,1,1,0,1,1,17,<18,1,
+22-2536,Alib,Jemi Lyka,Palcon,01/30/2003,"Dicamay II, Jones, Isabela",Gilbert B Alib & Gina Lyn P. Alib,"cetirizine, count, paracetamol, vitamin",not recorded,1,0,0,0,0,2,19,18-21,1,20.67
+21-2569,Dancio,Joy,Mejia,08/12/2001,Baguio City,Ricardo Adade Jr. Vira Roxas Isabela,"ambroxol, cetirizine, cold, count, illegible, medicine, omeprazole, query, vitamin","advised, physiciannurse",1,1,1,0,1,2,21,18-21,1,21.35
+22-1606,Aquino,Alyssa Cyrese,Pangaran,"Oct 1, 2004","Echague, Isabela",Josephine P. Aquino,"antacid, illegible, medication, other","illegible, lab, request, urinalysis",0,1,1,0,0,1,18,18-21,1,30.24
+22-0100,Mamdarin,Gunna,Pazo,"Jan 29, 2004","Starton, Manila",Rodalyn Pazo,"illegible, paracetamol","cento, checkup, dr, last, vilma",0,0,1,1,0,1,18,18-21,1,
+20-2535,Bricia,Tiffany Mae,H,"Oct 16, 2002","Pigu, Ilagan, Isabela",Janny... Bricia... (Address),not recorded,not recorded,1,1,0,0,0,2,19,18-21,1,26.09
+,Domingo,Diane,Ramos,"July 1, 2005","Victoria, Alicia, Isabela","Renette R. Domingo; Antonio Alicia, Isabela",not recorded,"advised, bed, compress, hot, rest",0,1,0,0,0,1,18,18-21,1,21.01
+22-2585,Alota,Jenete,Vianca,11/21/03,"Rizal, Santiago City, Isabela",Aireen A. P. Alota,"count, illegible, med, paracetamol",advised,0,0,1,1,1,1,19,18-21,1,23.25
+,Bimmoy,Jaizel,Gum-in,"June 4, 2004","Aguinaldo, Ifugao",Perlita Bimmot / Daramuangan Sur SMI,"count, illegible, med, paracetamol",not recorded,1,1,1,0,0,4,21,18-21,1,
+19-2068,Agustin,Jolly Beth,Sacro,03/06/1996,"Buisilelao, Echague, Isabela",Delia Sacro Agustin,not recorded,"allergies, notes, pregnancy, various",0,0,0,1,1,1,23,22+,1,17.96
+23-2423,Dela Cruz,Kymarell,Rosales,"Sep 9, 2006",Cauayan City,Marites R. Dela Cruz,"acid, count, mefenamic",illegible,1,1,0,0,0,3,16,<18,1,17.18
+,Navarro,John Paul,Not on form,Not on form,Not on form,Not on form,not recorded,not recorded,1,0,0,0,0,,20,18-21,,
+,Andres,Raniel,Not on form,Not on form,Not on form,Not on form,not recorded,"bed, days, rest, return, symptoms, wo",1,0,0,0,0,,20,18-21,,
+,Dullawan,Erica,Pinkihan,"Jan 19, 2004","Diadi, Echague, Isabela",Evangeline P. Dullawan,"antibiotic, cold, forte, medicine","advised, illegible, rest",1,0,1,0,0,1,19,18-21,1,18.07
+23-1720,Navarro,John Paul,Bumanlag,"Jan 26, 2005","A. C..., Diffun, Quirino",Jinky B. Navarro,"cetirizine, count, day, loraze, neozep, once, tab, twice","avoid, cold, days, drinks, for, now",1,1,1,1,0,1,18,18-21,0,22.49
+21-0713,Aggalut,Florie Rise,A.,07/28/03,"Alicia, Isabela",Not recorded,"ambroxol, cetirizine, cold, medicine, paracetamol, twiceday",not recorded,1,0,1,0,0,,19,18-21,1,
+22-1958,Aguilar,Lyka May,Jamias,03/05/2004,"Loria, Angadanan, Isabela",Emerson C. Aguilar,illegible,"advised, bactil, full",1,0,1,0,0,1,19,18-21,1,17.79
+,Daquioag,Cherie Anne,Mengullo,03-14-2004,"Salay, San Agustin, Isabela",Saturnino P. Daquioag,"acetylcysteine, count, symdex",not recorded,1,0,1,0,0,3,23,22+,1,
+22-0127,Abana,Kehannah Maigne,Fermin,"Sep 21, 2003","Santiago City, Isabela",Olivia F. Abana,"cold, cotrim, medicine, mefenamic, vitamin",not recorded,1,0,0,0,0,1,19,18-21,1,
+,Abad,Kate Angeli,Galutera,"Oct 04, 200...","Bayombong, Nueva Vizcaya",Dina G. Abad,"cefalexin, day, paracetamol",myalgia,1,0,1,0,0,1,17,<18,1,23.6
+,De Vera,Jhona,Cabrera,"Oct 22, 2004","Bannagao, Quezon",John De Vera,medication,not recorded,1,0,0,0,0,1,18,18-21,1,18.13
+23-1901,Baani,Janica Bryl,Domingo,01/15/2005,"Gen. Aguinaldo, Ramon, Isabela",Diana Domingo,"acid, cold, illegible, med, mefenamic, mg, paracetamol",not recorded,1,0,0,0,0,2,19,18-21,1,22.23
+23-1079,Bugaukan,Ruth Mae,Frauka,"August 22, 2004","Paddad, Alicia, Isabela",Ronilo D. Bugaukan,"count, paracetamol",vitamin,0,1,0,0,0,1,19,18-21,1,
+,Baccay,Crizia Mae,Jalas,08/10/2004,"Santiago, Tuguegarao",Cristo Rey Baccay,"count, illegible, med, neozep, paracetamol",not recorded,1,0,1,0,0,1,18,18-21,1,26.99
+,Bautista,Jade,Reyes,"May 14, 2005","Mambabanga, Luna, Isabela",Gloria Reyes Bautista,"antibiotic, count",not recorded,1,1,1,0,0,1,18,18-21,1,19.84
+,Bollea,Wenrlyn,Estoesta,"July 26, 2005","Cauayan City, Isabela",Richard A Bollea,"acetylcysteine, acid, antibiotic, illegible, mefenamic, mg",not recorded,1,0,1,0,0,1,18,18-21,1,24.21
+,Baccal,Nickie Rose,Kasete,"September 06, 2005","San Antonio, City of Ilagan, Isabela",Rowena Baccal,"bioflu, count, illegible, med, mg, paracetamoldecongestant",count,1,0,1,0,0,1,17,<18,1,23.19
+23-2009,Baladad,Gracia Mae,Baldugo,"June 7, 2005","M... Echague, Isabela",Ariel B. Baladad,"advised, illegible",advised,0,0,0,1,0,1,18,18-21,1,
+23-1903,Bugain,Rizamel,Paunillan,10/06/2004,"Libertad, Echague, Isabela",Gemma P. Bugain,advised,illegible,0,1,1,0,0,1,19,18-21,1,23.04
+23-1901,Baani,Janica Bryl,Domingo,01/15/2005,"Ramon, Aguinaldo, Isabela",Jocelyn D. Baani,paracetamol,height,0,1,0,0,0,1,18,18-21,1,22.21
+20-2168,Ballesta,Queenky Mri,Quimo,"March 8, 2001",Pangasinan,Imdda Ballesta,"acetylcysteine, count, symdex, tab",illegible,1,0,1,0,0,3,24,22+,1,
+24-0638,Hillado,Reinamae,Bala,10-17-2005,Santiago City,Federico P. Hillado,"count, day, kremil, mg, nebulization, omeprazole, salbutamol",not recorded,1,1,1,0,0,1,18,18-21,1,21.09
+25-0202,Baard,Gilbert,Canoran,"Oct 19, 2007","San Francisco, Alicia, Isabela",Gilbert A. Baard,"advised, done, tetanus, toxoid",not recorded,1,0,0,0,0,1,17,<18,0,19.29
+23-210,Ammayen,Christian,(Illegible),"Dec 28, 2002","San Mateo, Isabela",Joan Mateo C. Ammayen,"cefalexin, illegible","advised, shot, tetanus",0,0,1,0,0,1,18,18-21,0,22.68
+25-0774,Aynga,Trisha Daniel,Wilang,11-24-2006,"Purok Maligaya, ..., San Mateo, Isabela",Daniel Aynga,"advised, amoxicillin, paracetamol, tab, xday",not recorded,0,0,1,0,0,1,18,18-21,0,23.88
+24-0690,Manundo,Mikaela,Secolles,07/25/2006,"Cabanatuan, Nueva Ecija",Noel Manundo,"buscopan, paracetamol",not recorded,0,1,0,1,0,1,17,<18,1,19.47
+24-2216,Manzano,Chona,Pamila,"Nov 15, 2005","San Mateo, Isabela",Abigail B. Manzano,"illegible, med","advised, checkup, dental",0,0,0,0,0,1,18,18-21,1,18.73
+25-0021,Andres,(Zyrus Leander?),(Illegible),12/22/2007,Manila,Jocelyn A. ...,"advised, count, paracetamol",not recorded,1,0,1,0,0,2,17,<18,0,18.36
+,Manuel,Chrizzia Lyne,Brayo,12-24-05,"Brgy 4, San Mateo, Isabela",Marilyn Manuel,"advil, advised, bed, nebulization, oresol, rest","disease, heart, history",1,0,0,0,0,1,18,18-21,1,
+25-2425,Aguda,Morris,Ciriaco,10/06/2006,"Santiago City, Isabela",Georgie Aguda,"count, symdex",not recorded,1,0,1,0,0,1,18,18-21,0,20.18
+,Atayde,Marc-Jay,V.,02/08/2006,Echague Isabela,Mary Anne Atayde,"advised, count, neozep, paracetamol",not recorded,1,1,1,0,0,1,18,18-21,0,20.38
+22-24 10,Magday,Jaia Laika,Manuel,"July 29, 2005","Purok 2, Patul, Santiago City",Sheila Marie D. Magday,"acid, mefenamic",not recorded,0,0,1,1,0,1,18,18-21,1,21.91
+24-2857,Manuel,Ashley Michaella Jayne,Silvilgon,"Oct 25, 2005",Purok 4 Sta Cruz San Manuel Isabela,Marcillo A. Manuel,"advil, bed, oresol, rehydration, rest, salts",ok,0,0,0,1,0,1,18,18-21,1,20.34
+24-0001,Macutay,Lynette,Dummang,"July 25, 2006","Santiago, Echague, Isabela",James Lee F. Macutay,"advised, cetirizine, tablet","action, further, nfa",0,0,1,1,0,1,17,<18,1,25.71
+,Gonzaga,Antonio,Ce,"Jan 20, 2005",T... Echague Isabela,Jomarie G. Gonzaga,"acetylcysteine, advil, cetirizine, tab, xday","action, further, nfa",1,0,1,0,0,1,19,18-21,0,21.87
+,Gol-Od,Ayrwin,Baygwe,"Jan 16, 2006","Bela, Luz... San Mateo...",(Illegible) Gol-Od,"amoxicillin, count, paracetamol","diagnosis, for, further, referral",1,1,1,0,0,1,18,18-21,0,18.22
+24-0515,Galdon,John,Gint,"June 17, 2005","Sampaloc, Manila",Jocelyn Gint Galdon,"advised, amoxicillin, count, erceflora, loperamide",not recorded,0,0,0,1,0,1,19,18-21,0,19.05
+,Malana,Angel Anne,Taguik,"Nov 23, 2005","Echague, Isabela",Ropn Roy M. Malana,"advised, bed, neozep, rest, tab",not recorded,1,1,1,1,0,1,18,18-21,1,26.93
+23-1930,Manaligod,Emily Joyce,Francisco,12/01/2004,"Magsaysay, Alicia, Isabela",Alicia Manaligod,"advised, applied, silver, sulfadiazine",illegible,0,0,1,1,0,1,19,18-21,1,
+,Madrid,Juliene Chekainah,Plates,"Nov 06, 2006","City of Ilagan, Isabela",Julie F. Madrid,"care, wound","action, further, nfa",0,0,0,0,0,1,17,<18,1,21.34
+25-0475,Balot,Justine Darell,Caballera,"Aug 10, 2007","Vigan City, Ilocos Sur",...,"count, illegible, med, paracetamol",illegible,0,1,1,0,0,1,17,<18,0,14.52
+23 2477,Galera,Bhel. Ly...,Pulligao,"Dec 10, 2004","... Aguinaldo, Ifugao",Carolina Galera,"count, illegible",not recorded,0,1,1,0,0,1,16,<18,1,20.08
+,Callal-an,Angelica,B...,"Dec 04, 200...","Tuguegarao City, Cagayan",Joel ...,"acetylcysteine, ambroxol, count",not recorded,1,0,1,0,0,1,16,<18,1,20.43
+,Bocc,Vincent,Callado,"Nov 08, 2007",D... Isabela,Mr. & Mrs. ...,not recorded,not recorded,0,0,1,1,0,1,17,<18,0,22.57
+,Pacasa,Anggeline,M...,"Nov 11, 200...","San Fabian, Echague, Isabela",Alfredo L. Pacasa Jr.,not recorded,not recorded,0,0,1,1,0,2,27,22+,1,22.58
+23-0070,Peng,Justin,E...,"Oct 14, 2003","Echague, Isabela",Carolino G. L...,"bed, count, paracetamol, rest",not recorded,1,0,1,0,0,1,19,18-21,0,1972.66
+25-1823,Borriga,Jan Lambert Nehemiah,...,"Dec 18, 2006",Cab... Quirino,Jan Joel E. Borriga,"amoxicillin, bioflu, xday",advised,1,0,1,0,0,1,18,18-21,0,16.65
+,Pamintuan,Cher Kirk,Pacio,"Oct 21, 2004","Santiago, Isabela",Sherwin/Sheryl Pamintuan,"acid, antibiotic, mefenamic, neozep, paracetamol",not recorded,1,0,1,0,0,1,18,18-21,0,29.41
+23-1160,Orton,K...,...,"Oct 26, 2005","Roxas, Isabela",Elisa N. Orton,"advised, count, illegible, med, paracetamol",not recorded,0,1,1,1,0,1,17,<18,0,22.86
+20-1018,Gabriel,Jeriel,Agpalza,08/02/2005,"Echague, Isabela",Nancy Casuga Agpalza,"buscopan, count, illegible, med",not recorded,0,1,0,0,0,1,18,18-21,1,22.38
+,Paguintalan,Micko James,Bayaca,"October 12, 2005","District 2, Quezon City",Franklin Paguintalan,"clinic, illegible","advised, referral",0,1,1,0,0,2,17,<18,0,33.14
+21-4234,Repicio,Charloie Kyle,H...,"August 12, 2006","San Fabian, Echague, Isabela",Aurora H. Repicio,"acid, count, mefenamic",not recorded,0,1,0,0,0,1,17,<18,1,
+,Ramirez,April Joy,Cordoba,"April 16, 200...",Potul Santiago City Isabela,Redento Ramirez,illegible,not recorded,0,0,1,0,0,1,18,18-21,1,18.67
+,Raguial,Angel Kate,De Dios,"Sep 09, 2006","San Antonio ..., Echague Isabela",... D. Raguial,not recorded,not recorded,0,0,0,0,0,1,17,<18,1,22.6
+25-1631,Badday,Kurt Angelo,,"Nov 10, 2006",T... Ilagan,C... A. Badday,illegible,not recorded,0,0,1,0,0,1,18,18-21,0,26.82
+25-0810,Paunlagan,Rogie,Mon...,"Oct 03, 2004","... Echague, Isabela",Rogelio D. Paunlagan,"acetylcysteine, advised, symdex, tab, xday",not recorded,1,0,1,1,0,2,18,18-21,0,20.2
+25-252...,Benitez,Lino,Datu,"Oct 9, 2006",Echague Isabela,Lilibeth D. Benitez,"acetylcysteine, advised, paracetamol",not recorded,1,0,1,0,0,1,18,18-21,0,20.18
+22-0332,Ramiz,Prince Emerjohn,Javier,"Oct 14, 2003","Ambatali, Ramon, Isabela",Ruben Gamiz,"advised, sole",not recorded,0,1,0,1,0,2,20,18-21,0,17.53
+23-0047,Ganado,Allyan Camile,Pocis,"June 17, 2005","Sta. Isabel Norte, City of Ilagan",Rodion P. Ganado Sr.,"advised, buscopan, sole",not recorded,0,1,0,1,0,,18,18-21,1,20
+,Panganiban,Dexter,Dela Cruz,"April 19, 2005","Cauayan City, Isabela",Anna Marie D. Panganiban,"acetylcysteine, advised, cetirizine, tab, xday",not recorded,0,0,1,1,0,1,18,18-21,0,17.58
+23-0809,Baltar,Samuel Christoffer,Antonio,"April 06, 2007","Dubinan East, Santiago City",Rachel A. Baltar,not recorded,not recorded,0,0,0,0,0,1,18,18-21,0,36.76
+24-219,Batarao,Robebelle Deer-Ynne,Bunay,"July 27, 2006",... Medical Hospital,Claire Rose ...,neozep,not recorded,1,0,0,1,0,1,17,<18,1,20.81
+23-124...,Florendo,John Paul,C...,"Jun 15, 2005","Alicia, Isabela",Edar F. Florendo,advised,not recorded,0,1,0,0,0,1,18,18-21,0,23.36
+23-2655,Furuc,Ma. Hanna Louella,Sa... (Salunat?),"Dec 05, 2003","Tuguegarao, Echague, Isabela",Mary Joy S. Furuc,"acid, count, mefenamic",not recorded,0,0,1,1,0,1,19,18-21,1,16.91
+23-1053,Pasion,Alec Hrt...,Dela Cruz,"Nov 19, 2005","Cauayan City, Isa.",Jasmine D. Pasion,"advised, count",advised,0,0,1,0,0,1,19,18-21,0,22.53
+20-1533,Pascua,Hans Christian,Alcaraz,"Dec 16, 2001","Vintar, Ilocos Norte",Princess Diana Tagufa,"cold, count, illegible, medicine",illegible,0,1,1,1,0,3,,,,
+23-0531,Raralio,Joy,,"Sep 10, 2004","Barangay ..., Isa",Rowan Jones Isa,"acid, cetirizine, cold, medicine, mefenamic, xday",advised,1,0,0,0,0,1,18,18-21,0,22.48
+24-2165,Rempillo,Mia,Marquez,"May 10, 2006","San Guillermo, Isabela",Flordante N. Rempillo,"cetirizine, count, mefenamic",not recorded,0,0,1,1,0,1,18,18-21,1,20.89
+,Reyes,Junie T-Ann,...,"Oct 19, 2004","Alicia, Isabela",... L. Reyes,illegible,"ht, refer",0,1,1,0,0,1,19,18-21,1,30.67
+23-0697,Barclay,Manuel,Maxilom,08-17-2007,Cauayan City Isabela,Freddie Barclay,illegible,not recorded,0,0,1,0,0,1,17,<18,0,23.13
+23-0614,Pangilinan,C... Milord,Tacho,"Oct 21, 2004","Santiago City, Isabela",Cherry Pie Pangilinan,"advised, paracetamol",not recorded,0,1,1,0,0,3,20,18-21,0,
+24-2396,Rosales,Norie Angelique,Tadeo,"June 11, 2006","Luna, Tumauini, Isabela",T... Chu...,"advised, cetirizine, paracetamol",not recorded,1,1,1,1,0,1,18,18-21,1,18.29
+,Garingan,Khastrevn,Card...,"Sep 1, 2003","San Fabian, Echague, Isa.",Estella Garingan,"advised, illegible, med, mg, xday",not recorded,0,0,1,0,0,1,19,18-21,1,23.8
+24-274,Pandalan,Quezette Sheynne,Buhay,"July 27, 2006",Southern Isabela Medical Center,Cherry Rose Pandalan,"count, neozep, vitamin",not recorded,1,1,0,1,0,1,17,<18,1,20.81
+24-0619,Samillano,Aincah Faith,Ramos,"July 26, 2004","Adventist Hospital, Santiago City",Allan Samillano,"advised, count, neozep",not recorded,1,0,0,0,0,1,17,<18,1,23.63
+,Sanchez,Stephanie Grace,Joaquin,"September 24, 2006","Santiago City, Isabela",Gary A. Sanchez,not recorded,not recorded,1,1,0,1,0,1,17,<18,1,22.22
+,Siobal,Joylyn,Tamundong,10-26-2004,"Gucab, Echague, Isabela",Joyclyn Siobal,"celecoxib, count, paracetamol",not recorded,0,1,1,0,0,1,19,18-21,1,20
+24-1140,Silos,Sofia Bianca,Acejas,"March 13, 2006","Silauan Norte, Echague, Isabela",Danilo D. Silos,"oxygen, paracetamol, rest, support",advised,0,1,0,0,0,1,18,18-21,1,25.22
+,Sumawang,Princes Claryshaine,Calimag,10/05/2005,"Cauayan City, Isabela",Edgardo B. Sumawang Jr.,"advised, ambroxol, cap, carbocisteine, daily, od, once, solmux, tab",not recorded,1,0,1,0,0,1,18,18-21,1,15.18
+24-1874,Solmayor,Cyrill,Delos Reyes,"September 25, 2004","P1 Victoria, Alicia, Isabela",Franco Solmayor,omeprazole,referral,0,1,0,1,0,1,19,18-21,1,37.59
+24-3165,Rempillo,Mia,Marquez,"May 19, 2006","San Guillermo, Isabela",Florante N. Rempillo,"acid, application, cetirizine, ice, mefenamic, pain, reliever",not recorded,0,0,1,1,0,1,18,18-21,1,20.89
+,Silao,Kathleen Happy,Dayros,2005-July-29,"Echague, Isabela",Carlos Dayros,"cetirizine, paracetamol","health, office, pho, physician, public, refer",1,0,1,1,0,1,18,18-21,1,19.31
+24-0036,Sauli,Monica Blessie,Balbas,"January 20, 2006","Banguilocus, Norte",Maricel Sauli,"ambroxol, symdex",not recorded,1,1,1,1,0,1,18,18-21,1,26.22
+25-3127,Sebastian,Charles Louie,Bongalos,"June 01, 2007","Calupaan, Alfonso Lista, Ifugao",Myrna Sebastian,"fluids, hydration, multivitamins, pn",not recorded,0,1,1,0,0,1,18,18-21,0,32.53
+25-0321,Tomas,Jay-R,Cayaban,09/03/2005,"Sto. Tomas, Alicia, Isabela",Benjamin Tomas,"cleaned, wound",not recorded,0,0,0,0,0,1,19,18-21,0,21.01
+25-1511,Sagauinit,Ivan,Balayan,"February 18, 2007","Ilagan City, Isabela",Arlene B. Sagauinit,"gargle, illegible, medication, salt, warm, water",not recorded,1,0,1,0,0,1,18,18-21,0,18.69
+25-1596,Salvador,Francis Van,Garcia,10/29/2007,"San Guillermo, Isabela",Romarone G. Salvador,"cleaningdressing, tetanus, toxoid, vaccine, wound",ok,0,0,0,0,0,1,17,<18,0,21.34
+25-2789,Tatup,Ramon Jr.,(Illegible),"October 25, 2006","De Vera, San Fabian, Echague",Ramon E. Tatup,not recorded,"action, further, nfa",0,0,0,0,0,1,18,18-21,0,17.57
+25-1601,Tandoc,Carlos Joaquin,D.,"August 01, 2007","De Vera's Medical Center, Santiago City",Jenny D. Tandoc,not recorded,not recorded,0,0,1,0,0,1,17,<18,0,31.86
+25-2499,Villamor,Tyron Jay,Ramos,"September 16, 2006","Sillawit, Cauayan City, Isabela",Marlon S. Villamor,"advised, paracetamol",not recorded,0,1,1,0,0,1,18,18-21,0,19.84
+25-1494,Valdez,Steven,Gutierrez,"September 20, 2007","St. Jude Hospital, Sampaloc Manila",Phoebe G. Valdez,"caps, likely, tuseran",not recorded,1,0,1,0,0,1,17,<18,0,25.39
+25-1779,Saet,Joshue Andrew,Sibayan,"July 15, 2007","Adventist Hospital, Santiago City",Jennie S. Saet,not recorded,"action, further, nfa",0,0,1,0,0,1,17,<18,0,19.2
+25-1012,Vergara,Jespon,Pascual,"June 10, 2007","Rizal, Alicia, Isabela",Jessamen Pascual,paracetamol,not recorded,0,1,1,0,0,1,18,18-21,0,22.41
+24-2080,Salcedo,Juan Gabriel,Manzano,10/30/05,"Sta. Mesa, Manila",Mat B. Salcedo,"count, diatabs, hydrite, metoclopramide, packets","advised, apple, banana, brat, diet, rice",0,1,0,0,0,1,18,18-21,0,21.51
+24-1239,Orzame,Christian,Amuyen,04-14-2006,Santiago City,Jessy Orzame,"advised, cinnarizine, meal",not recorded,0,0,0,0,0,1,18,18-21,0,19.47
+,Suyat,Jordan,(Illegible),"August 19, 2004","Rizal West, San Isidro",(Illegible),not recorded,not recorded,1,0,1,0,0,1,19,18-21,0,17.58
+24-2569,Batarao,Joaquin,Markuz,"February 1, 2006","Sto. Domingo, Echague",Anavic B. Tan,"advised, kremil, mg, omeprazole",not recorded,0,1,0,0,0,1,19,18-21,0,23.67
+24-0212,Salvador,Mark Anthony,Cabudol,"August 13, 2000","San Antonio Minit, Echague",Roana Salvador,not recorded,not recorded,0,0,1,0,0,2,23,22+,0,20.69
+,Taguinod,Jan Harry,(Illegible),10/29/2005,"San Fabian, Echague",(Illegible),"advised, pain, reliever, rest",not recorded,0,1,0,0,0,2,19,18-21,0,18.73
+24-2140,Tumacder,Jhonard Lance,U.,"June 01, 2007","Calupaan, Alfonso Lista",Compahia (Guardian),"antibiotic, illegible",not recorded,1,0,0,0,0,1,18,18-21,0,21.87
+,Sanchez,Jezzreal Pyx,Ablang,2006-February-22,"Balete, Diadi, Nueva Vizcaya",Reynard R. Sanchez,paracetamol,"physician, referred",0,1,1,0,0,1,18,18-21,0,18.07
+24-2499,Quiming,Jasper,Santos,"August 03, 2007","District 1, San Manuel, Isabela",Analiza S. Quiming,advised,not recorded,1,0,1,0,0,1,17,<18,0,20.86
+24-1161,Peralta,Christian,Turingan,08/26/2006,"Laga, A. Lista, Ifugao",Johnny Peralta,"advil, bedrest, nebulization, salbutamol, symdex",not recorded,1,0,0,0,0,1,17,<18,0,21.8
+23-1689,Suguitan,Jerico,Fernandez,"January 8, 2005","San Mariano, Isabela",Virginia Suguitan,"decongestant, gel, multivitamins, neozep, soft, tab",advised,1,0,0,0,0,1,18,18-21,0,20.52
+,Pascual,Michael Jay,Dacusin,10/27/2006,"Mallig, Isabela",Maribel Pascual,"antibiotic, illegible",not recorded,1,0,1,0,0,1,17,<18,0,18.37
+23-1500,Racual,Rene Melvin,Miguel,"September 22, 2005","Fugu, Isabela",Nympha Samante,"advised, coldflu, med, symdex",not recorded,0,0,0,0,0,1,17,<18,0,18.69
+,Ragual,Louie James,Reyes,"May 29, 2005","Echague, Isabela",Enriqueta Ragual,"acetylcysteine, symdex",not recorded,1,0,0,1,0,1,18,18-21,0,20.7
+23/1113,Serrao,Julius Caesar,Dalida,"March 1, 2005","Cauayan City, Isabela",Gilbert Serrao,"advised, dressing, tetanus, toxoid, vaccine, wound",not recorded,0,0,1,0,0,1,18,18-21,0,26.81
+,Renon,John Carlo Alexander,Buccat,"August 12, 2005","Centro, Sta. Ana, Cagayan Valley",Perlita P. Renon,"bed, given, liquid, oxygen, rest, sugar",ok,1,0,0,0,0,1,17,<18,0,17.71
+24-0896,Palangeo,Harry Lloyd,Aguilar,"August 25, 2004","Brgy. Buluangin, Solano, Nueva Vizcaya",Jocelyn Palangeo,"decongestant, neozep",not recorded,1,0,0,0,0,1,17,<18,0,28.01
+24-2748,Pablo,Sean Mikhail,Pilon,09-Mar-06,Santiago City,Winnie P. Pablo,"antibiotic, illegible",not recorded,1,1,1,0,0,1,18,18-21,0,26.18
+24-2219,Pascual,Giersses Lloyd,Tomas,"June 29, 2006",Hong Kong,Edgar Pascual,"advised, application, celecoxib, cold, compress, ice, pain, reliever",not recorded,0,0,0,0,0,1,17,<18,0,34.67
+,Ramos,John Vint Ezekiel,Estimada,"June 21, 2005","Impil, Cuyapo, Nueva Ecija",Nethyn P. Estimada,"antibiotic, paracetamol",not recorded,1,0,1,1,0,1,18,18-21,0,20.08
+23-0554,Salvador,Alvin Jay,Garcia,"March 30, 2004","San Antonio, Alicia, Isabela",Resedelica G. Salvador,"acetylcysteine, cinnarizine, paracetamol",not recorded,1,0,1,0,0,1,19,18-21,0,17.29
+23-0415,Tagao,Christian Paul,Luyun,"Feb. 07, 2005","Palattao, Naguilian, Isabela",Brandon S. Tagao,"advised, ambroxol, mucosolvan, paracetamol",not recorded,1,1,1,1,0,1,18,18-21,0,
+,Santacera,Michael James,Posidio,"July 9, 2005","San Juan, Alicia, Isabela",Sheryl Santacera,"ambroxol, cefalexin, fluid, increase, intake",not recorded,1,1,1,0,0,1,18,18-21,0,21.94
+,Serrado,Julius Caesar,Dalida,"March 1, 2005","Culalabat, Cauayan City",Gilbert Serrado,paracetamol,not recorded,0,0,1,0,0,1,18,18-21,0,21.63
+23-0023,Tamang,Jericho,H.,"September 02, 2003","Zone 01, SMI",H. Tamang,"azithromycin, paracetamol",not recorded,1,0,1,1,0,1,19,18-21,0,30.12
+,Taguda,Andrei Louis,Catpanan,"May 18, 2002",Santiago City,Victoria Taguda,"increase, intake, paracetamol",advised,1,0,0,0,0,1,21,18-21,0,21.1
+,Tamandan,Jerome,Jarayad,11-14-2005,"Mabuhay, Echague, Isabela",Antonette T. Tamandan,"acetylcysteine, ambroxol, fluid, increase, intake, symdex",not recorded,1,1,1,0,0,1,17,<18,0,19.72
+23-0480,Sabado,Deniel James,Iclan,"February 10, 2005","Victoria, Alicia, Isabela",Janesa Sabado,"nov, paracetamol","advised, nov",1,1,1,1,0,1,18,18-21,0,20.37
+23-0507,Telan,John Mark,Pasion,"January 27, 2005",Lagan City,Victoria Telan,"acetylcysteine, cinnarizine, paracetamol",not recorded,1,0,1,0,0,1,18,18-21,0,21.1
+,Toliao,Rener Paul,Ramil,"March 20, 2005","Mabantad, Cauayan City",Remedios R. Toliao,"acetylcysteine, ambroxol, paracetamol",not recorded,1,0,1,0,0,2,18,18-21,0,
+22-2250,Nabua,Edmar,Soriano,"November 11, 2003","Sto. Domingo, Alicia, Isabela",Mary Ann S. Nabua,"back, days, for, hx, needed, neozep, out, paracetamol, pm, prn, watch, wof",advised,1,0,1,1,0,1,19,18-21,0,
+22-0435,Lumaban,Gerald,Alcantara,08/20/2003,"San Fabian, Echague, Isabela",,"advised, hyoscine",not recorded,0,1,1,0,0,1,19,18-21,0,
+22-0148,Estolero,Jerome,Pabiling,10/11/2003,"Brgy. Pabil, Ramon, Isabela",Rosalia S. Pabiling,"after, azithromycin, cold, gargle, meal, medicine, saline, warm",not recorded,1,0,0,0,0,1,19,18-21,0,
+22-0332,Gamiz,Prince Emerjohn,Javier,"October 14, 2003","Ambatali, Ramon, Isabela",Robina Gamiz,"azithromycin, cetirizine, mg, od, tab",not recorded,1,1,1,0,0,2,20,18-21,0,16.3
+22-2507,Estalilla,Percival,,"October 15, 2002","Dabubu Grande, San Agustin, Isabela",Vergie E. Sales,"ambroxol, symdex",not recorded,1,0,0,1,0,4,22,22+,0,
+,Tagay,Arnold,Castro,"September 24, 2003","Bolinao, Pangasinan",Noli O. Tagay,not recorded,not recorded,0,0,1,1,0,2,19,18-21,0,22.06
+,Ranes,Von Joshua,,"August 22, 2001","Echague, Isabela",Elizabeth V. Lim,"azithromycin, mg, oral, paracetamol, rehydration, salts",not recorded,0,0,1,0,0,1,21,18-21,0,20.2
+22-1940,Bautista,Ron,,"September 16, 2003","Cabaruan, Naguilian, Isabela",,"advised, dme, needed, paracetamol, prn",not recorded,0,0,0,0,0,1,19,18-21,0,
+,Galabay,Heinrich Emmanuel,Babas,"February 23, 2005","Reina Mercedes, Isabela",,"ambroxol, antibiotic, cold, medicine",not recorded,1,0,1,1,0,1,17,<18,0,
+22-2008,Mattehig,Christopher,Joliven,"July 09, 2003","Gumbauan, Echague, Isabela",,"advised, antacid, cimetidine, omeprazole",not recorded,0,1,1,0,0,1,19,18-21,0,
+22-0762,Bitantes,Kara,(Illegible),"1/20/2023 (Likely error, visit date written)","Ilagan City, Isabela",(Illegible),"cold, compress, compression, elevation, ice, rest, rice","isu, referral, rescue, team",0,1,0,0,0,1,18,18-21,1,
+,Cabalongo,Gerard Jan,Datul,"October 27, 2000",I-lagan City,Jackielyn C. Datul,"bath, paracetamol, sponge",not recorded,0,0,1,0,0,2,21,18-21,0,15.42
+22-2478,Jones,Maximin II,Castillo,"December 5, 2003","Echague, Isabela",Mylyn C. Jones,"mg, neozep, omeprazole, paracetamol",not recorded,1,1,1,0,0,3,21,18-21,0,30.25
+22-1753,Coriezo,Peter John,(Illegible),"October 25, 2003","Oscariz, Ramon, Isabela",(Illegible),"amoxicillin, dressing, wound",not recorded,0,0,0,0,0,1,19,18-21,0,
+22-0893,Carrillo,Clarence,Navarro,"October 21, 2004","Sta. Cruz, Echague, Isabela",Leopoldo R. Carrillo,"acetylcysteine, mg, neozep, tab",not recorded,1,0,1,0,0,3,20,18-21,0,22.79
+,Excepheus,Lamer,(Illegible),"November 10, 2003","San Antonio, Ramon, Isabela",(Illegible),"metoclopramide, mg, paracetamol, tab",not recorded,1,1,1,0,0,3,21,18-21,0,18.34
+22-1589,Blanco,John Ivan,Tacadena,07/29/2004,"Cabanguis, Quirino",Rhodora T. Blanco,"acid, mefenamic, mg, ponstan",not recorded,0,1,0,0,0,1,19,18-21,0,25.31
+,Jaylord,Blas,(Illegible),"Sept. 15, 2003","Nagbukel, San Isidro, Isabela",Alfredo Q. Blas,"amoxicillin, cetirizine, mg, neozep",advised,1,0,1,0,0,,18,18-21,0,
+22-1970,Benavidez,Richard,Matias,"Dec 20, 2002","Aurora, Isabela",Feodote R. Benavidez,"acid, antibiotics, mefenamic, paracetamol, ponstan",not recorded,1,1,1,0,1,1,22,22+,0,
+23-0448,Enriquez,Ayelle Clare,Sumangil,"March 11, 2005","Urdaneta, Pangasinan",Mrs. Avelina A. Enriquez,azithromycin,not recorded,1,0,0,0,0,1,18,18-21,1,
+,Omnes,Erika Joy,Agustin,"July 22, 2005","Sto. Domingo, San Isidro Luna Isabela",Danica A. Omnes,not recorded,not recorded,1,0,0,1,0,1,19,18-21,1,16.2
+,Datul,Gerard Jan,Cabalongo,"October 27, 2002",Ilagan City,Jackielyn C. Datul,paracetamol,not recorded,0,0,1,0,0,2,21,18-21,0,32.09
+25-2883,Navarro,Jenilyn,Jimenez,12-16-2007,"Sta. Maria, Alicia, Isabela",Christina J. Navarro,"ambroxol, symdex","allergies, known, nka",1,0,1,0,0,1,17,<18,1,28.47
+22-094,Benavides,Richard,Matias,"Dec 20, 2002","Sta. Rita, Aurora, Isabela",Feodote R. Benavides,"acid, antibiotics, mefenamic, paracetamol",not recorded,0,1,1,0,0,1,22,22+,0,
+22-1696,Blanco,John Ivan,Tacadena,07/29/2004,"Cabanguis, Quirino",Rhodora T. Blanco,"paracetamol, vitamin",not recorded,0,1,1,0,0,1,19,18-21,0,25.31
+22-2509,Barasi,Almart,Alanigan,10-18-2002,"San Ignacio, Ilagan",,"cinnarizine, likely, metoclopramide, needed, paracetamol, pin, plasil, plasit",not recorded,0,0,0,0,0,,20,18-21,0,
+,Valdez,Jerico,,November 30 (Year not visible),"Victoria, San Isidro, Isabela",Glenda Valdez,"neozep, paracetamol",not recorded,1,0,1,0,0,,19,18-21,0,
+22-0281,Barraquias,Clarence,,"March 31, 2004","Cauayan, Isabela",,"advil, buscopan, butylbromide, hyoscine, mg, omeprazole",not recorded,0,1,1,0,0,4,21,18-21,0,21.16
+22-0828,Bautista,Rubert,Cariaga,"September 18, 2003","Surcoc, Naguilian",,"cefalexin, day, neozep, tid",not recorded,1,0,1,0,0,1,19,18-21,0,19.37
+21-0189,Azman,Jazztin Marc Jaybiel,Gallena,09/07/2003,Cauayan City,,"cinnarizine, kremil, loperamide, neozep, omeprazole, oral, ors, paracetamol",not recorded,1,0,1,0,0,,20,18-21,0,22.75
+21-2143,Truno,Danilo,Mayomo,"March 17, 2003","Gundaway, Cabarroguis, Quirino",,"acid, celecoxibmefenamic, compress, hot, pain, reliever",not recorded,0,1,1,0,0,1,19,18-21,0,
+25-2736,Piscador,Roberly Ann,Mensalvas,"July 13, 2007","Centro 02, San Guillermo Isabela",Robert D. Piscador Sr.,"acetylcysteine, advised, ambroxol, cetirizine, daily, fluid, increase, intake, mg",not recorded,1,0,1,0,0,1,18,18-21,1,23.68
+25-1903,Paoua,Mariel,Gammad,"March 7, 2007","Centro East, Santiago City",Samuel Paoua,"dressing, paracetamol, wound","action, allergies, further, known, nfa, nka",0,0,0,0,0,1,18,18-21,1,26.99
+25-3091,Pascua,Aero,(Illegible),05/06/2007,"Sandiat West, San Manuel",Marita A. Pascua,"care, compress, hot, pain, pn, referral, relievernursing",not recorded,0,1,1,0,0,1,18,18-21,1,21.5
+25-2433,Pardo,Precious Gabrielle Angela,Agcaoili,"June 25, 2007","Echague, Isabela",Myra B. Agcaoili,"advised, oct, paracetamol, pn",not recorded,1,1,1,0,0,1,17,<18,1,18.65
+25-3110,Paray,Jonalyn,Catapay,"June 17, 2007","Salvador, Alicia",Antonino Paray,not recorded,"allergies, known, nka, pregnancy, pt, test",0,0,0,0,0,1,18,18-21,1,16.01
+25-2435,Parotina,Maria Teresa,Millano,03-29-2006,Roxas Isabela,Angielyn P. Sina,not recorded,not recorded,0,0,0,0,0,1,19,18-21,1,21.79
+25-1904,Pague,Marie Angelie,Martes,"August 25, 2006","Baguio City, Benguet",Dina Martes,"bedrest, needed, paracetamol",not recorded,0,1,1,0,0,1,18,18-21,1,19.48
+,Peralta,Angelica,Orpano,09/19/02,Sta Cruz Echague,Elizabeth Peralta,not recorded,"allergies, known, nka",0,0,0,0,0,1,22,22+,1,18.55
+,Pedro,Zayra Mae,Macahidhid,"May 16, 2005","Antonino, Alicia, Isabela",Melvin D. Pedro,"advised, bactidol, day, gargle, needed, symdex, tab",not recorded,1,0,1,0,0,1,18,18-21,1,19.56
+25-1504,Padua,Jenny,Lucas,"January 30, 2007","Villa Campo, Echague",Romeo A. Padua,not recorded,"allergies, history, known, multi, nka, use",0,0,0,0,0,1,18,18-21,1,19.49
+25-1082,Quindoyo,April Mae,Ramor,04/05/2007,"Alicia, Isabela",Gina Quindoyo,illegible,not recorded,0,1,0,1,0,1,18,18-21,1,20.91
+,Reyes,Joyce Ann,(Illegible),"October 19, 2004","Alicia, Isabela",(Illegible),"cefalexin, clindamycin, metronidazole",not recorded,1,0,1,1,1,1,19,18-21,1,28.35
+24-2343,Respicio,Charlotte Kyle,(Illegible),"August 12, 2006","Purok 6, Camarag, San Isidro",Aurora H. Respicio,"compress, hot, paracetamol",not recorded,0,1,1,0,0,1,17,<18,1,
+,Paringit,Erika Joy,(Illegible),"March 27, 2004",Tuguegarao City,Lerma Paringit,"loperamide, oral, rehydration, salts",not recorded,0,0,0,0,0,1,18,18-21,1,18.61
+,Peralta,Danica Irish,Tuscano,"June 27, 2004","Alcala, Cagayan",Willy Peralta,"bedrest, neb, nebulization, oxygen, salbutamol, support",not recorded,1,1,0,1,0,2,19,18-21,1,17.54
+24-2396,Rosales,Norlie Angelique,(Illegible),"June 21, 2006","Cabatuan, Isabela",Joy Rosales,"antibiotic, bactidol, gargle",not recorded,0,0,0,0,0,1,18,18-21,1,18.29
+24-0950,Rivera,Cherry,(Illegible),"September 03, 2006","P-4, Bu... Echague",Jenny F. Rivera,"neozep, paracetamol",not recorded,0,0,1,0,0,1,17,<18,1,17.01
+24-0061,Pascua,Charisma Joy,Silva,"December 03, 2005","Cabaritan, San Manuel, Isabela",Jovelyn S. Pascua,"nebulization, salbutamol",not recorded,1,0,0,0,0,2,18,18-21,1,26.56
+24-2380,Pelagio,Erwin,Taquiam,06-19-2006,"Alimanao, Penablanca, Cagayan",Joseph C. Pelagio,"cleaning, dressing, wound",not recorded,0,0,1,0,0,1,19,18-21,0,
+22-2233,Rosales,Jomari,G.,"June 27, 2002","San Mateo, Isabela",(Illegible),paracetamol,not recorded,1,1,1,0,0,3,20,18-21,0,
