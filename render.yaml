@@ -1,5 +1,6 @@
 # Render deployment configuration
 # See https://render.com/docs/blueprint-spec
+# Updated: 2025-12-14 - Force redeploy with notebook artifacts (3 clusters)
 
 services:
   - type: web
