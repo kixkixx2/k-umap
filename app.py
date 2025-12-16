@@ -397,6 +397,7 @@ class ArtifactService:
                     "umap_x": result["umap_coordinates"]["x"],
                     "umap_y": result["umap_coordinates"]["y"],
                     "input_data": row,
+                    "sanitized_features": result.get("sanitized_features", {}),
                 })
             except Exception as exc:  # noqa: BLE001 - need to capture all issues
                 failures.append({"row": idx, "errors": [str(exc)]})
@@ -1199,6 +1200,8 @@ def create_app() -> Flask:
             success["cluster_profile"] = profile
             
             # Build patient record for persistence (to make them searchable)
+            # Use sanitized_features for consistent feature values, fall back to input_data
+            sanitized = success.get("sanitized_features", {})
             input_data = success.get("input_data", {})
             patient_record = {
                 "patient_id": success.get("patient_id"),
@@ -1207,22 +1210,23 @@ def create_app() -> Flask:
                 "cluster_confidence": success.get("confidence"),
                 "umap_x": success.get("umap_x"),
                 "umap_y": success.get("umap_y"),
-                # Include all input features
-                "year_level": input_data.get("year_level"),
-                "age_years": input_data.get("age_years"),
-                "age_group": input_data.get("age_group"),
-                "is_female": input_data.get("is_female"),
-                "bmi": input_data.get("bmi"),
-                "has_respiratory_issue": input_data.get("has_respiratory_issue"),
-                "has_pain": input_data.get("has_pain"),
-                "has_fever": input_data.get("has_fever"),
-                "has_allergy": input_data.get("has_allergy"),
-                "is_uti": input_data.get("is_uti"),
+                # Include all features - prefer sanitized values, fall back to input
+                "year_level": sanitized.get("year_level") or input_data.get("year_level"),
+                "age_years": sanitized.get("age_years") or input_data.get("age_years"),
+                "age_group": sanitized.get("age_group") or input_data.get("age_group"),
+                "is_female": sanitized.get("is_female") if sanitized.get("is_female") is not None else input_data.get("is_female"),
+                "bmi": sanitized.get("bmi") or input_data.get("bmi"),
+                "has_respiratory_issue": sanitized.get("has_respiratory_issue") if sanitized.get("has_respiratory_issue") is not None else input_data.get("has_respiratory_issue"),
+                "has_pain": sanitized.get("has_pain") if sanitized.get("has_pain") is not None else input_data.get("has_pain"),
+                "has_fever": sanitized.get("has_fever") if sanitized.get("has_fever") is not None else input_data.get("has_fever"),
+                "has_allergy": sanitized.get("has_allergy") if sanitized.get("has_allergy") is not None else input_data.get("has_allergy"),
+                "is_uti": sanitized.get("is_uti") if sanitized.get("is_uti") is not None else input_data.get("is_uti"),
             }
             
             # Add patient to cluster records (makes them searchable)
             if artifact_service.add_patient(patient_record):
                 saved_count += 1
+                print(f"[BatchPredict] Saved patient {patient_record['patient_id']} to cluster records")
         
         payload = {
             "total_rows": len(rows),
