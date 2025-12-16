@@ -135,9 +135,22 @@ DEFAULT_FIELD_INFO = {
 # ---------------------------------------------------------------------------
 # Artifact loader and prediction helpers
 # ---------------------------------------------------------------------------
+
+# Check for persistent data directory (for Render persistent disk)
+PERSISTENT_DATA_DIR = os.environ.get("PERSISTENT_DATA_DIR", "").strip()
+
 class ArtifactService:
     def __init__(self, artifact_dir: Path):
         self.artifact_dir = artifact_dir
+        
+        # Use persistent directory for patient data if available
+        if PERSISTENT_DATA_DIR and os.path.isdir(PERSISTENT_DATA_DIR):
+            self.data_dir = Path(PERSISTENT_DATA_DIR)
+            print(f"[ArtifactService] Using persistent data directory: {self.data_dir}")
+        else:
+            self.data_dir = artifact_dir
+            print(f"[ArtifactService] Using artifact directory for data: {self.data_dir}")
+        
         self.metadata = self._load_json("training_metadata.json")
         self.reducer = self._load_joblib("umap_reducer.joblib")
         self.kmeans = self._load_joblib("kmeans_model.joblib")
@@ -151,10 +164,27 @@ class ArtifactService:
         self._cluster_index = {str(rec.get("patient_id")): rec for rec in self._cluster_records}
         # Track file modification time for multi-worker synchronization
         self._cluster_file_mtime = self._get_cluster_file_mtime()
+        
+        # Copy initial data to persistent storage if needed
+        self._ensure_persistent_data()
+
+    def _ensure_persistent_data(self) -> None:
+        """Copy cluster_visualization.json to persistent storage if it doesn't exist there."""
+        if self.data_dir == self.artifact_dir:
+            return  # No persistent storage configured
+        
+        persistent_file = self.data_dir / "cluster_visualization.json"
+        source_file = self.artifact_dir / "cluster_visualization.json"
+        
+        if not persistent_file.exists() and source_file.exists():
+            import shutil
+            print(f"[ArtifactService] Copying initial data to persistent storage")
+            shutil.copy(source_file, persistent_file)
+            self._cluster_file_mtime = self._get_cluster_file_mtime()
 
     def _get_cluster_file_mtime(self) -> float:
         """Get modification time of cluster visualization file."""
-        cluster_path = self.artifact_dir / "cluster_visualization.json"
+        cluster_path = self.data_dir / "cluster_visualization.json"
         try:
             return cluster_path.stat().st_mtime if cluster_path.exists() else 0.0
         except Exception:
@@ -274,10 +304,10 @@ class ArtifactService:
         return normalized
 
     def _save_cluster_records(self) -> None:
-        """Save cluster records to JSON file."""
-        cluster_path = self.artifact_dir / "cluster_visualization.json"
+        """Save cluster records to JSON file (uses persistent storage if available)."""
+        cluster_path = self.data_dir / "cluster_visualization.json"
         # Create a backup first
-        backup_path = self.artifact_dir / "cluster_visualization.json.bak"
+        backup_path = self.data_dir / "cluster_visualization.json.bak"
         if cluster_path.exists():
             import shutil
             shutil.copy(cluster_path, backup_path)
@@ -299,6 +329,8 @@ class ArtifactService:
         
         with open(cluster_path, "w", encoding="utf-8") as fh:
             json.dump(save_records, fh, indent=2, cls=NaNSafeJSONEncoder)
+        
+        print(f"[ArtifactService] Saved {len(save_records)} patients to {cluster_path}")
 
     def predict_single(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         if (
@@ -419,8 +451,13 @@ class ArtifactService:
         return scaled, sanitized_dict
 
     def _load_cluster_records(self) -> List[Dict[str, Any]]:
-        cluster_path = self.artifact_dir / "cluster_visualization.json"
+        # Try persistent data directory first, then fall back to artifact directory
+        cluster_path = self.data_dir / "cluster_visualization.json"
+        if not cluster_path.exists():
+            cluster_path = self.artifact_dir / "cluster_visualization.json"
+        
         if cluster_path.exists():
+            print(f"[ArtifactService] Loading cluster records from {cluster_path}")
             with open(cluster_path, "r", encoding="utf-8") as fh:
                 original_records = json.load(fh)
                 normalized: List[Dict[str, Any]] = []
@@ -460,6 +497,7 @@ class ArtifactService:
                     normalized_record["features"] = features
 
                     normalized.append(normalized_record)
+                print(f"[ArtifactService] Loaded {len(normalized)} patients")
                 return normalized
         return []
 
