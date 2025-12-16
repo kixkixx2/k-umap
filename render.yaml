@@ -1,13 +1,12 @@
 # Render deployment configuration
 # See https://render.com/docs/blueprint-spec
-# Updated: 2025-12-16 - Added persistent disk for data persistence
 
 services:
   - type: web
     name: patient-clustering-api
     runtime: python
-    region: oregon  # or singapore, frankfurt, ohio
-    plan: free  # free, starter, standard, pro (change to 'starter' for persistent disk)
+    region: oregon
+    plan: free
     buildCommand: pip install -r requirements.txt && python build.py
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
     envVars:
@@ -19,13 +18,5 @@ services:
         value: "artifacts"
       - key: FRONTEND_DIR
         value: "frontend"
-      # Set to /data if using persistent disk, otherwise leave empty
-      - key: PERSISTENT_DATA_DIR
-        value: ""
     healthCheckPath: /stats
     autoDeploy: true
-    # Uncomment below and change plan to 'starter' ($7/month) to enable persistent disk
-    # disk:
-    #   name: patient-data
-    #   mountPath: /data
-    #   sizeGB: 1
