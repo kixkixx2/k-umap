@@ -149,6 +149,25 @@ class ArtifactService:
         self.cluster_profiles = _generate_cluster_profiles(self.cluster_summary)
         self._cluster_records = self._load_cluster_records()
         self._cluster_index = {str(rec.get("patient_id")): rec for rec in self._cluster_records}
+        # Track file modification time for multi-worker synchronization
+        self._cluster_file_mtime = self._get_cluster_file_mtime()
+
+    def _get_cluster_file_mtime(self) -> float:
+        """Get modification time of cluster visualization file."""
+        cluster_path = self.artifact_dir / "cluster_visualization.json"
+        try:
+            return cluster_path.stat().st_mtime if cluster_path.exists() else 0.0
+        except Exception:
+            return 0.0
+
+    def _refresh_if_stale(self) -> None:
+        """Reload cluster records if file has been modified by another worker."""
+        current_mtime = self._get_cluster_file_mtime()
+        if current_mtime > self._cluster_file_mtime:
+            print(f"[ArtifactService] Reloading cluster records (file modified by another worker)")
+            self._cluster_records = self._load_cluster_records()
+            self._cluster_index = {str(rec.get("patient_id")): rec for rec in self._cluster_records}
+            self._cluster_file_mtime = current_mtime
 
     @property
     def ready(self) -> bool:
@@ -162,16 +181,21 @@ class ArtifactService:
         ])
 
     def list_patients(self) -> List[Dict[str, Any]]:
+        self._refresh_if_stale()
         return self._cluster_records
 
     def get_patient(self, patient_id: str) -> Dict[str, Any] | None:
         if patient_id is None:
             return None
+        self._refresh_if_stale()
         return self._cluster_index.get(str(patient_id))
 
     def add_patient(self, patient_record: Dict[str, Any]) -> bool:
         """Add a newly predicted patient to the cluster records and persist to JSON file."""
         try:
+            # First, refresh from file in case another worker added patients
+            self._refresh_if_stale()
+            
             patient_id = str(patient_record.get("patient_id", ""))
             if not patient_id:
                 return False
@@ -197,6 +221,9 @@ class ArtifactService:
             
             # Persist to file
             self._save_cluster_records()
+            
+            # Update our tracked mtime so we don't trigger unnecessary reloads
+            self._cluster_file_mtime = self._get_cluster_file_mtime()
             return True
         except Exception as e:
             print(f"Error adding patient: {e}")
