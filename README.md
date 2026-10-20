@@ -1,35 +1,4 @@
-# Patient Clustering API - K-UMAP
-
-A Flask-based API for patient clustering using UMAP dimensionality reduction and K-Means clustering.
-
-## 🚀 Deployment to Render
-
-### Quick Deploy
-
-1. **Push to GitHub**: Ensure your code is in a GitHub repository
-
-2. **Create a New Web Service on Render**:
-   - Go to [Render Dashboard](https://dashboard.render.com/)
-   - Click **"New +"** → **"Web Service"**
-   - Connect your GitHub repository
-
-3. **Configure Settings**:
-   - **Name**: `patient-clustering-api`
-   - **Runtime**: Python 3
-   - **Build Command**: `pip install -r requirements.txt && python build.py`
-   - **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120`
-
-4. **Environment Variables** (optional):
-   - `ARTIFACT_DIR`: `artifacts`
-   - `FRONTEND_DIR`: `frontend`
-
-5. Click **"Create Web Service"**
-
-### Using render.yaml (Blueprint)
-
-Alternatively, use the included `render.yaml` for automatic configuration:
-- Go to Render Dashboard → **"Blueprints"**
-- Connect repository and Render will auto-detect the configuration
+# K-UMAP
 
 ## 📁 Project Structure
 
